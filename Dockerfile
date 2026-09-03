@@ -3,7 +3,7 @@ WORKDIR /app
 ENV CI=
 ENV NODE_OPTIONS="--openssl-legacy-provider --max-old-space-size=768"
 COPY . .
-RUN NODE_ENV=development npm ci --include=dev --no-audit --no-fund --registry=https://registry.npmjs.org \
+RUN NODE_ENV=development npm ci --include=dev --no-audit --no-fund --registry=https://registry.npmjs.org/ \
     && test -f node_modules/@vue/cli-service/bin/vue-cli-service.js
 RUN NODE_ENV=production npm run build
 

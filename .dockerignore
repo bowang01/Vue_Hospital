@@ -4,5 +4,4 @@ dist
 .idea
 .vscode
 *.md
-.npmrc
 .DS_Store
