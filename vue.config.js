@@ -12,6 +12,9 @@ module.exports = {
             hints: false
         }
     },
+    chainWebpack: (config) => {
+        config.module.rule("js").exclude.add(/initialize\.js/);
+    },
     devServer: {
         //host: "139.224.72.73",
         host: "localhost",
