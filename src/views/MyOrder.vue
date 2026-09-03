@@ -4,57 +4,57 @@
             <el-table :data="orderData" stripe style="width: 100%" border>
                 <el-table-column
                     prop="oId"
-                    label="挂号单号"
-                    width="75px"
+                    label="Appointment No."
+                    width="140px"
                 ></el-table-column>
                 <el-table-column
                     prop="pId"
-                    label="本人id"
-                    width="75px"
+                    label="My ID"
+                    width="90px"
                 ></el-table-column>
                 <el-table-column
                     prop="pName"
-                    label="姓名"
-                    width="75px"
+                    label="Name"
+                    width="100px"
                 ></el-table-column>
                 <el-table-column
                     prop="dId"
-                    label="医生id"
-                    width="75px"
+                    label="Doctor ID"
+                    width="100px"
                 ></el-table-column>
                 <el-table-column
                     prop="dName"
-                    label="医生姓名"
-                    width="75px"
+                    label="Doctor Name"
+                    width="120px"
                 ></el-table-column>
 
                 <el-table-column
                     prop="oStart"
-                    label="挂号时间"
+                    label="Appointment Time"
                     width="195px"
                 ></el-table-column>
                 <el-table-column
                     prop="oEnd"
-                    label="结束时间"
+                    label="End Time"
                     width="185px"
                 ></el-table-column>
                 <el-table-column
                     prop="oTotalPrice"
-                    label="需交费用/元"
-                    width="80px"
+                    label="Fee (CNY)"
+                    width="100px"
                 ></el-table-column>
                 <el-table-column
                     prop="oPriceState"
-                    label="缴费状态"
+                    label="Payment"
                     width="150"
                 >
                     <template slot-scope="scope">
                         <el-tag
                             type="success"
                             v-if="scope.row.oPriceState === 1"
-                            >已缴费</el-tag
+                            >Paid</el-tag
                         >
-                        <!-- <el-tag type="danger" v-if="scope.row.oPriceState === 0 && scope.row.oState === 1">未缴费</el-tag> -->
+                        <!-- <el-tag type="danger" v-if="scope.row.oPriceState === 0 && scope.row.oState === 1">Unpaid</el-tag> -->
                         <el-button
                             type="warning"
                             style="font-size: 14px"
@@ -64,11 +64,11 @@
                             "
                             @click="priceClick(scope.row.oId, scope.row.dId)"
                         >
-                            点击缴费</el-button
+                            Pay</el-button
                         >
                     </template>
                 </el-table-column>
-                <el-table-column prop="oState" label="挂号状态" width="100px">
+                <el-table-column prop="oState" label="Status" width="100px">
                     <template slot-scope="scope">
                         <el-tag
                             type="success"
@@ -76,18 +76,18 @@
                                 scope.row.oState === 1 &&
                                 scope.row.oPriceState === 1
                             "
-                            >已完成</el-tag
+                            >Completed</el-tag
                         >
                         <el-tag
                             type="danger"
                             v-if="
                                 scope.row.oState === 0 && scope.row.oState === 0
                             "
-                            >未完成</el-tag
+                            >Incomplete</el-tag
                         >
                     </template>
                 </el-table-column>
-                <el-table-column label="报告单" fixed="right" width="150">
+                <el-table-column label="Report" fixed="right" width="150">
                     <template slot-scope="scope">
                         <el-button
                             type="success"
@@ -97,25 +97,25 @@
                                 scope.row.oState === 1 &&
                                 scope.row.oPriceState === 1
                             "
-                            > 查看</el-button
+                            > View</el-button
                         >
                     </template>
                 </el-table-column>
             </el-table>
         </el-card>
-        <!-- 评价对话框 -->
-        <el-dialog title="用户评价" :visible.sync="starVisible">
+        <!-- Rating dialog -->
+        <el-dialog title="Rating" :visible.sync="starVisible">
             <div>
                 <h3>
-                    请对工号：{{ dId }}&nbsp;医生：{{ dName }}&nbsp;进行评价
+                    Rate doctor {{ dName }} (ID: {{ dId }})
                 </h3>
             </div>
             <div>
                 <el-rate v-model="star" show-text> </el-rate>
             </div>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="starVisible = false" style="font-size: 18px;"> 取 消</el-button>
-                <el-button type="primary" @click="starClick" style="font-size: 18px;"> 确 定</el-button>
+                <el-button @click="starVisible = false" style="font-size: 18px;"> Cancel</el-button>
+                <el-button type="primary" @click="starClick" style="font-size: 18px;"> Confirm</el-button>
             </div>
         </el-dialog>
     </div>
@@ -137,7 +137,7 @@ export default {
         };
     },
     methods: {
-        //评价点击确认
+        // Confirm rating
         starClick() {
             console.log(this.star);
             console.log(this.dId);
@@ -150,17 +150,16 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200)
-                        return this.$message.error("评价失败");
-                    this.$message.success("谢谢您的评价");
+                        return this.$message.error("Rating failed");
+                    this.$message.success("Thank you for your rating");
                     this.starVisible = false;
                 });
         },
-        //查看报告单
+        // View report
         seeReport(id) {
-            window.location.href =
-                "http://localhost:9281/patient/pdf?oId=" + id;
+            window.location.href = "/hospital/patient/pdf?oId=" + id;
         },
-        //点击缴费按钮
+        // Pay button
         priceClick(oId, dId) {
             request
                 .get("hospital/order/updatePrice", {
@@ -170,10 +169,10 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200) {
-                        this.$message.error("请求数据失败");
+                        this.$message.error("Failed to load data");
                         return;
                     }
-                    this.$message.success("单号 " + oId + " 缴费成功！");
+                    this.$message.success("Appointment " + oId + " paid successfully");
                     request
                         .get("hospital/admin/findDoctor", {
                             params: {
@@ -182,7 +181,7 @@ export default {
                         })
                         .then((res) => {
                             if (res.data.status !== 200)
-                                return this.$message.error("请求数据失败");
+                                return this.$message.error("Failed to load data");
                             this.dId = res.data.data.dId;
                             this.dName = res.data.data.dName;
                         });
@@ -190,7 +189,7 @@ export default {
                     this.requestOrder();
                 });
         },
-        //请求挂号信息
+        // Request appointment data
         requestOrder() {
             request
                 .get("hospital/patient/findOrderByPid", {
@@ -200,7 +199,7 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200)
-                        this.$message.error("请求数据失败");
+                        this.$message.error("Failed to load data");
                     this.orderData = res.data.data;
                     //this.orderData.dSection = res.data.data.map(item => item.doctor.dSection);
                     //console.log(res.data.data.map(item => item.doctor.dSection));
@@ -209,13 +208,13 @@ export default {
                     console.log(res);
                 });
         },
-        //token解码
+        // Decode token
         tokenDecode(token) {
             if (token !== null) return jwtDecode(token);
         },
     },
     created() {
-        // 解码token
+        // Decode token
         //this.orderData.pName = this.tokenDecode(getToken()).pName;
         //this.orderData.pCard = this.tokenDecode(getToken()).pCard;
         this.userId = this.tokenDecode(getToken()).pId;

@@ -1,16 +1,16 @@
 <template>
     <div>
-        <!-- 卡片 -->
+        <!-- Card -->
         <el-card>
-            <!-- 搜索栏及增加检查 -->
+            <!-- Search bar and add exam -->
             <el-row type="flex">
                 <el-col :span="6">
-                    <el-input v-model="query" placeholder="请输入名称查询">
+                    <el-input v-model="query" placeholder="Search by name">
                         <el-button
                             slot="append"
                             style="font-size: 18px;"
                             @click="requestChecks"
-                        > 搜索</el-button>
+                        > Search</el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="6"></el-col>
@@ -20,35 +20,35 @@
                         style="font-size: 18px"
                         @click="addFormVisible = true"
                     > 
-                        增加项目</el-button
+                        Add Exam</el-button
                     >
                 </el-col>
             </el-row>
-            <!-- 表格 -->
+            <!-- Table -->
             <el-table :data="checkData" stripe style="width: 100%" border>
-                <el-table-column label="编号" prop="chId"></el-table-column>
-                <el-table-column label="项目" prop="chName"></el-table-column>
+                <el-table-column label="ID" prop="chId"></el-table-column>
+                <el-table-column label="Item" prop="chName"></el-table-column>
                 <el-table-column
-                    label="价格/元"
+                    label="Fee (CNY)"
                     prop="chPrice"
                 ></el-table-column>
-                <el-table-column label="操作" width="290" fixed="right">
+                <el-table-column label="Actions" width="290" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             style="font-size: 18px"
                             type="success"
                             @click="modifyDialog(scope.row.chId)"
-                        > 编辑</el-button>
+                        > Edit</el-button>
                         <el-button
                             style="font-size: 18px"
                             type="danger"
                             @click="deleteDialog(scope.row.chId)"
-                        > 删除</el-button>
+                        > Delete</el-button>
                     </template>
                 </el-table-column>
             </el-table>
 
-            <!-- 分页 -->
+            <!-- Pagination -->
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -62,47 +62,47 @@
             </el-pagination>
         </el-card>
 
-        <!-- 增加检查项目对话框 -->
-        <el-dialog title="增加检查项目" :visible.sync="addFormVisible">
+        <!-- Add exam dialog -->
+        <el-dialog title="Add Exam" :visible.sync="addFormVisible">
             <el-form :model="addForm" :rules="rules" ref="ruleForm">
-                <el-form-item label="编号" prop="chId" label-width="80px">
+                <el-form-item label="ID" prop="chId" label-width="110px">
                     <el-input v-model.number="addForm.chId"></el-input>
                 </el-form-item>
-                <el-form-item label="名称" prop="chName" label-width="80px">
+                <el-form-item label="Name" prop="chName" label-width="110px">
                     <el-input v-model="addForm.chName"></el-input>
                 </el-form-item>
-                <el-form-item label="价格" prop="chPrice" label-width="80px">
+                <el-form-item label="Price" prop="chPrice" label-width="110px">
                     <el-input v-model="addForm.chPrice"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="addFormVisible = false" style="font-size: 18px;"> 取 消</el-button>
+                <el-button @click="addFormVisible = false" style="font-size: 18px;"> Cancel</el-button>
                 <el-button type="primary" @click="addCheck('ruleForm')"
-                    style="font-size: 18px;"> 确 定</el-button
+                    style="font-size: 18px;"> Confirm</el-button
                 >
             </div>
         </el-dialog>
 
-        <!-- 修改检查项目药物对话框 -->
-        <el-dialog title="修改检查项目" :visible.sync="modifyFormVisible">
+        <!-- Edit exam dialog -->
+        <el-dialog title="Edit Exam" :visible.sync="modifyFormVisible">
             <el-form :model="modifyForm" :rules="rules" ref="ruleForm">
-                <el-form-item label="编号" prop="chId" label-width="80px">
+                <el-form-item label="ID" prop="chId" label-width="110px">
                     <el-input
                         v-model.number="modifyForm.chId"
                         disabled
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="名称" prop="chName" label-width="80px">
+                <el-form-item label="Name" prop="chName" label-width="110px">
                     <el-input v-model="modifyForm.chName"></el-input>
                 </el-form-item>
-                <el-form-item label="价格" prop="chPrice" label-width="80px">
+                <el-form-item label="Price" prop="chPrice" label-width="110px">
                     <el-input v-model="modifyForm.chPrice"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="modifyFormVisible = false" style="font-size: 18px;"> 取 消</el-button>
+                <el-button @click="modifyFormVisible = false" style="font-size: 18px;"> Cancel</el-button>
                 <el-button type="primary" @click="modifyCheck('ruleForm')"
-                    style="font-size: 18px;"> 确 定</el-button
+                    style="font-size: 18px;"> Confirm</el-button
                 >
             </div>
         </el-dialog>
@@ -124,24 +124,24 @@ export default {
             addForm: {},
             rules: {
                 chId: [
-                    { required: true, message: "请输入编号", trigger: "blur" },
+                    { required: true, message: "Please enter ID", trigger: "blur" },
                     {
                         type: "number",
-                        message: "账号必须数字类型",
+                        message: "ID must be a number",
                         trigger: "blur",
                     },
                 ],
                 chName: [
-                    { required: true, message: "请输入名称", trigger: "blur" },
+                    { required: true, message: "Please enter name", trigger: "blur" },
                     {
                         min: 1,
                         max: 50,
-                        message: "账号必须是1到50个字符",
+                        message: "Name must be 1 to 50 characters",
                         trigger: "blur",
                     },
                 ],
                 chPrice: [
-                    { required: true, message: "请输入单价", trigger: "blur" },
+                    { required: true, message: "Please enter unit price", trigger: "blur" },
                 ],
             },
             modifyFormVisible: false,
@@ -149,7 +149,7 @@ export default {
         };
     },
     methods: {
-        //点击修改药物信息
+        // Submit edited exam
         modifyCheck(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -163,10 +163,10 @@ export default {
                         })
                         .then((res) => {
                             if (res.data.status !== 200)
-                                return this.$message.error("修改信息失败！");
+                                return this.$message.error("Failed to update!");
                             this.modifyFormVisible = false;
                             this.requestChecks();
-                            this.$message.success("修改检查项目信息成功！");
+                            this.$message.success("Exam updated successfully!");
                             console.log(res);
                         });
                 } else {
@@ -175,7 +175,7 @@ export default {
                 }
             });
         },
-        //打开修改对话框
+        // Open edit dialog
         modifyDialog(id) {
             request
                 .get("hospital/check/findCheck", {
@@ -185,13 +185,13 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200)
-                        return this.$message.error("请求数据失败");
+                        return this.$message.error("Failed to load data");
                     this.modifyForm = res.data.data;
                     this.modifyFormVisible = true;
                     console.log(res);
                 });
         },
-        //删除检查操作
+        // Delete exam
         deleteCheck(id) {
             request
                 .get("hospital/check/deleteCheck", {
@@ -204,28 +204,28 @@ export default {
                     console.log(res);
                 });
         },
-        //删除对话框
+        // Delete dialog
         deleteDialog(id) {
-            this.$confirm("此操作将删除该检查项目信息, 是否继续?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm("Delete this exam?", "Notice", {
+                confirmButtonText: "Confirm",
+                cancelButtonText: "Cancel",
                 type: "warning",
             })
                 .then(() => {
                     this.deleteCheck(id);
                     this.$message({
                         type: "success",
-                        message: "删除成功!",
+                        message: "Deleted successfully!",
                     });
                 })
                 .catch(() => {
                     this.$message({
                         type: "info",
-                        message: "已取消删除",
+                        message: "Deletion cancelled",
                     });
                 });
         },
-        //点击增加确认按钮
+        // Confirm add
         addCheck(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -240,11 +240,11 @@ export default {
                         .then((res) => {
                             if (res.data.status !== 200)
                                 return this.$message.error(
-                                    "编号不合法或已被占用！"
+                                    "Invalid or occupied ID!"
                                 );
                             this.addFormVisible = false;
                             this.requestChecks();
-                            this.$message.success("增加检查项目成功！");
+                            this.$message.success("Exam added successfully!");
                             console.log(res);
                         });
                 } else {
@@ -253,18 +253,18 @@ export default {
                 }
             });
         },
-        //页面大小改变时触发
+        // Triggered when page size changes
         handleSizeChange(size) {
             this.size = size;
             this.requestChecks();
         },
-        //   页码改变时触发
+        // Triggered when page number changes
         handleCurrentChange(num) {
             console.log(num);
             this.pageNumber = num;
             this.requestChecks();
         },
-        // 加载检查列表
+        // Load exam list
         requestChecks() {
             request
                 .get("hospital/check/findAllChecks", {

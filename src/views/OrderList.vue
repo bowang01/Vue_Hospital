@@ -1,70 +1,70 @@
 <template>
-    <!-- 卡片 -->
+    <!-- Card -->
     <el-card>
-        <!-- 搜索栏 -->
+        <!-- Search bar -->
         <el-row type="flex">
             <el-col :span="6">
-                <el-input v-model="query" placeholder="请输入患者id查询">
+                <el-input v-model="query" placeholder="Search by patient ID">
                     <el-button
                         slot="append"
                         style="font-size: 18px;"
                         @click="requestOrders"
-                    > 搜索</el-button>
+                    > Search</el-button>
                 </el-input>
             </el-col>
         </el-row>
-        <!-- 表格 -->
+        <!-- Table -->
         <el-table :data="orderData" stripe style="width: 100%" border>
             <el-table-column
                 prop="oId"
-                label="挂号单号"
-                width="80px"
+                label="Appointment No."
+                width="140px"
             ></el-table-column>
             <el-table-column
                 prop="pId"
-                label="患者id"
-                width="80px"
+                label="Patient ID"
+                width="110px"
             ></el-table-column>
 
-            <el-table-column prop="dId" label="医生id" width="100px">
+            <el-table-column prop="dId" label="Doctor ID" width="100px">
             </el-table-column>
 
             <el-table-column
                 prop="oStart"
-                label="挂号时间"
+                label="Appointment Time"
                 width="180px"
             ></el-table-column>
             <el-table-column
                 prop="oEnd"
-                label="结束时间"
+                label="End Time"
                 width="180px"
             ></el-table-column>
             <el-table-column
                 prop="oRecord"
-                label="病因"
+                label="Diagnosis"
                 width="400px"
             ></el-table-column>
             <el-table-column
                 prop="oDrug"
-                label="药物"
+                label="Drugs"
                 width="180px"
             ></el-table-column>
             <el-table-column
                 prop="oCheck"
-                label="检查项目"
+                label="Exam Items"
                 width="180px"
             ></el-table-column>
             <el-table-column
                 prop="oTotalPrice"
-                label="费用/元"
-                width="80px"
+                label="Fee (CNY)"
+                width="100px"
             ></el-table-column>
-            <el-table-column prop="oPriceState" label="缴费状态" width="100px">
+            <el-table-column prop="oPriceState" label="Payment" width="100px">
                 <template slot-scope="scope">
                     <el-tag type="success" v-if="scope.row.oPriceState === 1"
-                        >已缴费</el-tag
+                        >Paid</el-tag
                     >
-                    <!-- <el-tag type="danger" v-if="scope.row.oPriceState === 0 && scope.row.oState === 1">未缴费</el-tag> -->
+                    <!-- <el-tag type="danger" v-if="scope.row.oPriceState === 0 && scope.row.oState === 1">Unpaid</el-tag> -->
                     <el-button
                         type="danger"
                         size="mini"
@@ -73,11 +73,11 @@
                             scope.row.oState === 1
                         "
                         @click="priceClick(scope.row.oId)"
-                        > 点击缴费</el-button
+                        > Pay</el-button
                     >
                 </template>
             </el-table-column>
-            <el-table-column prop="oState" label="挂号状态" width="100px">
+            <el-table-column prop="oState" label="Status" width="110px">
                 <template slot-scope="scope">
                     <el-tag
                         type="success"
@@ -85,27 +85,27 @@
                             scope.row.oState === 1 &&
                             scope.row.oPriceState === 1
                         "
-                        >已完成</el-tag
+                        >Completed</el-tag
                     >
                     <el-tag
                         type="danger"
                         v-if="scope.row.oState === 0 && scope.row.oState === 0"
-                        >未完成</el-tag
+                        >Incomplete</el-tag
                     >
                 </template>
             </el-table-column>
-            <el-table-column label="操作" width="140" fixed="right">
+            <el-table-column label="Actions" width="140" fixed="right">
                 <template slot-scope="scope">
                     <el-button
                         style="font-size: 18px"
                         type="danger"
                         @click="deleteDialog(scope.row.oId)"
-                    > 删除</el-button>
+                    > Delete</el-button>
                 </template>
             </el-table-column>
         </el-table>
 
-        <!-- 分页 -->
+        <!-- Pagination -->
         <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -134,7 +134,7 @@ export default {
         };
     },
     methods: {
-        //点击缴费按钮
+        // Pay button
         priceClick(oId, dId) {
             request
                 .get("hospital/order/updatePrice", {
@@ -144,14 +144,14 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200) {
-                        this.$message.error("请求数据失败");
+                        this.$message.error("Failed to load data");
                         return;
                     }
-                    this.$message.success("单号 " + oId + " 缴费成功！");
+                    this.$message.success("Appointment " + oId + " paid successfully");
                     this.requestOrders();
                 });
         },
-        //删除挂号操作
+        // Delete appointment
         deleteOrder(id) {
             request
                 .get("hospital/admin/deleteOrder", {
@@ -164,39 +164,39 @@ export default {
                     console.log(res);
                 });
         },
-        //删除对话框
+        // Delete dialog
         deleteDialog(id) {
-            this.$confirm("此操作将永久删除该挂号信息, 是否继续?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm("Permanently delete this appointment?", "Notice", {
+                confirmButtonText: "Confirm",
+                cancelButtonText: "Cancel",
                 type: "warning",
             })
                 .then(() => {
                     this.deleteOrder(id);
                     this.$message({
                         type: "success",
-                        message: "删除成功!",
+                        message: "Deleted successfully!",
                     });
                 })
                 .catch(() => {
                     this.$message({
                         type: "info",
-                        message: "已取消删除",
+                        message: "Deletion cancelled",
                     });
                 });
         },
-        //页面大小改变时触发
+        // Triggered when page size changes
         handleSizeChange(size) {
             this.size = size;
             this.requestOrders();
         },
-        //   页码改变时触发
+        // Triggered when page number changes
         handleCurrentChange(num) {
             console.log(num);
             this.pageNumber = num;
             this.requestOrders();
         },
-        // 加载订单列表
+        // Load order list
         requestOrders() {
             request
                 .get("hospital/admin/findAllOrders", {

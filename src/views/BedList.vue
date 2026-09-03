@@ -1,16 +1,16 @@
 <template>
     <div>
-        <!-- 卡片 -->
+        <!-- Card -->
         <el-card>
-            <!-- 搜索栏及增加检查 -->
+            <!-- Search bar and add bed -->
             <el-row type="flex">
                 <el-col :span="6">
-                    <el-input v-model="query" placeholder="请输入患者id查询">
+                    <el-input v-model="query" placeholder="Search by patient ID">
                         <el-button
                             slot="append"
                             @click="requestBeds"
                             style="font-size: 18px"
-                        > 搜索</el-button>
+                        > Search</el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="6"></el-col>
@@ -20,51 +20,51 @@
                         style="font-size: 18px"
                         @click="addFormVisible = true"
                     > 
-                        增加床位</el-button
+                        Add Bed</el-button
                     >
                 </el-col>
             </el-row>
-            <!-- 表格 -->
+            <!-- Table -->
             <el-table :data="bedData" stripe style="width: 100%" border>
-                <el-table-column label="床号" prop="bId"></el-table-column>
-                <el-table-column label="患者id" prop="pId"></el-table-column>
-                <el-table-column label="医生id" prop="dId"></el-table-column>
+                <el-table-column label="Bed No." prop="bId"></el-table-column>
+                <el-table-column label="Patient ID" prop="pId"></el-table-column>
+                <el-table-column label="Doctor ID" prop="dId"></el-table-column>
                 <el-table-column
-                    label="开始时间"
+                    label="Start Time"
                     prop="bStart"
                 ></el-table-column>
                 <el-table-column
-                    label="申请理由"
+                    label="Reason"
                     prop="bReason"
                 ></el-table-column>
-                <el-table-column label="状态" prop="bState">
+                <el-table-column label="Status" prop="bState">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.bState === 1" type="danger"
-                            >已占用</el-tag
+                            >Occupied</el-tag
                         >
                         <el-tag v-if="scope.row.bState === 0" type="success"
-                            >空</el-tag
+                            >Vacant</el-tag
                         >
                     </template>
                 </el-table-column>
 
-                <el-table-column label="操作" width="260" fixed="right">
+                <el-table-column label="Actions" width="260" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             style="font-size: 18px"
                             type="success"
                             @click="emptyDialog(scope.row.bId)"
-                        > 清空</el-button>
+                        > Clear</el-button>
                         <el-button
                             style="font-size: 18px"
                             type="danger"
                             @click="deleteDialog(scope.row.bId)"
-                        > 删除</el-button>
+                        > Delete</el-button>
                     </template>
                 </el-table-column>
             </el-table>
 
-            <!-- 分页 -->
+            <!-- Pagination -->
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -78,17 +78,17 @@
             </el-pagination>
         </el-card>
 
-        <!-- 增加床位对话框 -->
-        <el-dialog title="增加床位" :visible.sync="addFormVisible">
+        <!-- Add bed dialog -->
+        <el-dialog title="Add Bed" :visible.sync="addFormVisible">
             <el-form :model="addForm" :rules="rules" ref="ruleForm">
-                <el-form-item label="床号" prop="bId" label-width="80px">
+                <el-form-item label="Bed No." prop="bId" label-width="110px">
                     <el-input v-model.number="addForm.bId"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="addFormVisible = false" style="font-size: 18px;"> 取 消</el-button>
+                <el-button @click="addFormVisible = false" style="font-size: 18px;"> Cancel</el-button>
                 <el-button type="primary" @click="addBed('ruleForm')"
-                    style="font-size: 18px;"> 确 定</el-button
+                    style="font-size: 18px;"> Confirm</el-button
                 >
             </div>
         </el-dialog>
@@ -110,10 +110,10 @@ export default {
             addForm: {},
             rules: {
                 bId: [
-                    { required: true, message: "请输入床号", trigger: "blur" },
+                    { required: true, message: "Please enter bed number", trigger: "blur" },
                     {
                         type: "number",
-                        message: "床号必须数字类型",
+                        message: "Bed number must be a number",
                         trigger: "blur",
                     },
                 ],
@@ -121,7 +121,7 @@ export default {
         };
     },
     methods: {
-        //清空床位操作
+        // Clear bed
         emptyBed(id) {
             request
                 .get("hospital/bed/emptyBed", {
@@ -134,29 +134,29 @@ export default {
                     console.log(res);
                 });
         },
-        //清空对话框
+        // Clear dialog
         emptyDialog(id) {
-            this.$confirm("此操作将清空该床位, 是否继续?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm("Clear this bed?", "Notice", {
+                confirmButtonText: "Confirm",
+                cancelButtonText: "Cancel",
                 type: "warning",
             })
                 .then(() => {
                     this.emptyBed(id);
                     this.$message({
                         type: "success",
-                        message: "清空成功!",
+                        message: "Cleared successfully!",
                     });
                 })
                 .catch(() => {
                     this.$message({
                         type: "info",
-                        message: "已取消清空",
+                        message: "Clear cancelled",
                     });
                 });
         },
 
-        //删除床位操作
+        // Delete bed
         deleteBed(id) {
             request
                 .get("hospital/bed/deleteBed", {
@@ -169,28 +169,28 @@ export default {
                     console.log(res);
                 });
         },
-        //删除对话框
+        // Delete dialog
         deleteDialog(id) {
-            this.$confirm("此操作将删除该床位, 是否继续?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm("Delete this bed?", "Notice", {
+                confirmButtonText: "Confirm",
+                cancelButtonText: "Cancel",
                 type: "warning",
             })
                 .then(() => {
                     this.deleteBed(id);
                     this.$message({
                         type: "success",
-                        message: "删除成功!",
+                        message: "Deleted successfully!",
                     });
                 })
                 .catch(() => {
                     this.$message({
                         type: "info",
-                        message: "已取消删除",
+                        message: "Deletion cancelled",
                     });
                 });
         },
-        //点击增加确认按钮
+        // Confirm add
         addBed(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -204,10 +204,10 @@ export default {
                         })
                         .then((res) => {
                             if (res.data.status !== 200)
-                                return this.$message.error("床号或已被占用！");
+                                return this.$message.error("Bed number invalid or occupied!");
                             this.addFormVisible = false;
                             this.requestBeds();
-                            this.$message.success("增加床位成功！");
+                            this.$message.success("Bed added successfully!");
                             console.log(res);
                         });
                 } else {
@@ -216,18 +216,18 @@ export default {
                 }
             });
         },
-        //页面大小改变时触发
+        // Triggered when page size changes
         handleSizeChange(size) {
             this.size = size;
             this.requestBeds();
         },
-        //   页码改变时触发
+        // Triggered when page number changes
         handleCurrentChange(num) {
             console.log(num);
             this.pageNumber = num;
             this.requestBeds();
         },
-        // 加载检查列表
+        // Load bed list
         requestBeds() {
             request
                 .get("hospital/bed/findAllBeds", {

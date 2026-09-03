@@ -1,43 +1,31 @@
 <template>
-    <div>
-        <!-- <div class="indexImage">
-        <img src="@/assets/hospital.jpeg" class="layoutImage"/>
-        <span>今天预约挂号总人数：{{orderPeople}}</span>
-      </div> -->
-        <div class="indexPeople">
-            <div class="userImage">
-                <i class="iconfont icon-r-user2" style="font-size: 132px"></i>
-            </div>
-
-            <div class="userFont">
-                <div class="spanCure">
-                    <span>就诊概况</span>
+    <div class="dash">
+        <div class="dash-hero">
+            <h2>Patient Home</h2>
+            <p>Book appointments and check today's hospital status</p>
+        </div>
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="iconfont icon-r-user2"></i>
                 </div>
-                <div class="spanPeople">
-                    <span>今天预约挂号总人数：{{ orderPeople }}</span>
+                <div>
+                    <div class="stat-label">Visit Overview</div>
+                    <div class="stat-value">{{ orderPeople }}</div>
+                    <div class="stat-hint">Today's appointment count</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="iconfont icon-r-home"></i>
+                </div>
+                <div>
+                    <div class="stat-label">Inpatient Overview</div>
+                    <div class="stat-value">{{ bedPeople }}</div>
+                    <div class="stat-hint">Today's inpatient count</div>
                 </div>
             </div>
         </div>
-        <div class="indexPeople">
-            <div class="userImage">
-                <i class="iconfont icon-r-home" style="font-size: 132px"></i>
-            </div>
-
-            <div class="userFont">
-                <div class="spanCure">
-                    <span>住院概况</span>
-                </div>
-                <div class="spanPeople">
-                    <span>今天住院总人数：{{ bedPeople }}</span>
-                </div>
-            </div>
-        </div>
-
-        <el-row>
-            <el-col :span="24">
-                <img src="@/assets/back.jpg" style="width: 941px;margin-left: 25px;">
-            </el-col>
-        </el-row>
     </div>
 </template>
 <script>
@@ -57,7 +45,7 @@ export default {
                 .get("hospital/order/orderPeople")
                 .then((res) => {
                     if (res.data.status !== 200)
-                        return this.$message.error("数据请求失败");
+                        return this.$message.error("Failed to load data");
                     this.orderPeople = res.data.data;
                 })
                 .catch((err) => {
@@ -68,9 +56,8 @@ export default {
             request
                 .get("hospital/bed/bedPeople")
                 .then((res) => {
-                    
                     if (res.data.status !== 200)
-                        return this.$message.error("数据请求失败");
+                        return this.$message.error("Failed to load data");
                     this.bedPeople = res.data.data;
                 })
                 .catch((err) => {
@@ -84,37 +71,3 @@ export default {
     },
 };
 </script>
-<style lang="scss" scoped>
-.userFont {
-    height: 150px;
-    width: 250px;
-    float: right;
-    color: white;
-    .spanCure {
-        font-size: 15px;
-        margin-top: 60px;
-        margin-bottom: 15px;
-    }
-    .spanPeople {
-        font-size: 18px;
-    }
-}
-
-.userImage {
-    height: 150px;
-    width: 150px;
-    font-size: 130px;
-    color: white;
-    position: relative;
-    left: 40px;
-    top: 10px;
-    float: left;
-}
-.indexPeople {
-    height: 200px;
-    width: 440px;
-    background: #58b9ae;
-    float: left;
-    margin: 30px;
-}
-</style>

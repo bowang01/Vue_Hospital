@@ -1,29 +1,24 @@
 <template>
     <el-card>
         <el-table :data="orderData" stripe border>
-            <el-table-column label="序号" type="index" width="50">
+            <el-table-column label="No." type="index" width="50">
             </el-table-column>
-            <el-table-column label="挂号单号" prop="oId"></el-table-column>
-            <el-table-column label="患者id" prop="pId"></el-table-column>
-            <el-table-column label="患者姓名" prop="pName"></el-table-column>
-            <el-table-column label="医生姓名" prop="dName"></el-table-column>
+            <el-table-column label="Appointment No." prop="oId"></el-table-column>
+            <el-table-column label="Patient ID" prop="pId"></el-table-column>
+            <el-table-column label="Patient Name" prop="pName"></el-table-column>
+            <el-table-column label="Doctor Name" prop="dName"></el-table-column>
             <el-table-column
-                label="挂号时间"
+                label="Appointment Time"
                 prop="oStart"
                 width="200px"
             ></el-table-column>
-            <el-table-column label="操作" fixed="right">
+            <el-table-column label="Actions" fixed="right" width="160">
                 <template slot-scope="scope">
                     <el-button
                         type="warning"
-                        style="font-size: 18px"
                         @click="dealClick(scope.row.oId, scope.row.pId)"
                     >
-                        <i
-                            class="iconfont icon-r-love"
-                            style="font-size: 26px"
-                        ></i>
-                         处理
+                        Process
                     </el-button>
                 </template>
             </el-table-column>
@@ -47,7 +42,7 @@ export default {
         };
     },
     methods: {
-        //挂号处理//页面跳转传值
+        // Process appointment: navigate and pass values
         dealClick(oId, pId) {
             this.$router.push({
                 path: "/dealOrder",
@@ -57,7 +52,7 @@ export default {
                 },
             });
         },
-        //获取挂号信息
+        // Get appointment data
         requestOrder() {
             console.log(this.today)
             request
@@ -70,15 +65,15 @@ export default {
                 .then((res) => {
                     
                     if (res.data.status != 200)
-                        return this.$message.error("获取数据失败");
+                        return this.$message.error("Failed to load data");
                     this.orderData = res.data.data;
                 });
         },
-        //token解码
+        // Decode token
         tokenDecode(token) {
             if (token !== null) return jwtDecode(token);
         },
-        //获取当天日期
+        // Get today's date
         nowDay() {
             const nowDate = new Date();
             let date = {
@@ -96,14 +91,14 @@ export default {
         },
     },
     created() {
-        //解码token信息
+        // Decode token
         this.userId = this.tokenDecode(getToken()).dId;
         this.userName = this.tokenDecode(getToken()).dName;
         console.log(this.userId);
         console.log(this.userName);
-        //获取当天日期
+        // Get today's date
         this.nowDay();
-        //获取订单信息
+        // Get order data
         this.requestOrder();
     },
 };

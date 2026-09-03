@@ -1,15 +1,15 @@
 <template>
-    <!-- 卡片 -->
+    <!-- Card -->
     <el-card>
-        <!-- 搜索栏及增加医生 -->
+        <!-- Search bar and add doctor -->
         <el-row type="flex">
             <el-col :span="8">
-                <el-input v-model="query" placeholder="请输入姓名查询">
+                <el-input v-model="query" placeholder="Search by name">
                     <el-button
                         slot="append"
                         style="font-size: 18px;"
                         @click="requestDoctors"
-                    > 搜索</el-button>
+                    > Search</el-button>
                 </el-input>
             </el-col>
             <el-col :span="4"></el-col>
@@ -17,11 +17,11 @@
                 <el-button type="primary" @click="addFormVisible = true"
                         style="font-size: 18px;"
                     > 
-                    增加医生</el-button
+                    Add Doctor</el-button
                 >
             </el-col>
             <el-col :span="4"></el-col>
-            <!-- 导入数据 -->
+            <!-- Import data -->
             <!-- <el-col :span="2">
                 <el-upload
                     class="upload-demo"
@@ -35,63 +35,63 @@
                     :on-error="handleError"
                     :file-list="fileList"
                 >
-                    <el-button size="small" type="success">一键导入</el-button>
+                    <el-button size="small" type="success">Import</el-button>
                 </el-upload>
             </el-col>
 
             <el-col :span="2">
                 <el-button size="small" type="success" @click="exportDoctors"
-                    >一键导出</el-button
+                    >Export</el-button
                 ></el-col
             > -->
         </el-row>
-        <!-- 表格 -->
+        <!-- Table -->
         <el-table :data="doctorData" stripe style="width: 100%" border>
-            <el-table-column prop="dId" label="账号" width="100">
+            <el-table-column prop="dId" label="Account" width="100">
             </el-table-column>
-            <el-table-column prop="dName" label="姓名" width="80">
+            <el-table-column prop="dName" label="Name" width="100">
             </el-table-column>
-            <el-table-column prop="dGender" label="性别" width="60">
+            <el-table-column prop="dGender" label="Gender" width="90">
             </el-table-column>
-            <el-table-column prop="dPost" label="职位" width="100">
+            <el-table-column prop="dPost" label="Title" width="180">
             </el-table-column>
-            <el-table-column prop="dSection" label="科室" width="100">
+            <el-table-column prop="dSection" label="Department" width="180">
             </el-table-column>
-            <el-table-column prop="dCard" label="证件号">
+            <el-table-column prop="dCard" label="ID Number">
             </el-table-column>
-            <el-table-column prop="dPhone" label="手机号">
+            <el-table-column prop="dPhone" label="Phone">
             </el-table-column>
-            <el-table-column prop="dEmail" label="邮箱" width="170">
+            <el-table-column prop="dEmail" label="Email" width="170">
             </el-table-column>
-            <el-table-column prop="dAvgStar" label="评分/5分" width="80">
+            <el-table-column prop="dAvgStar" label="Rating / 5" width="100">
             </el-table-column>
-            <el-table-column prop="dPrice" label="挂号费/元" width="100">
+            <el-table-column prop="dPrice" label="Fee (CNY)" width="100">
             </el-table-column>
-            <el-table-column prop="dState" label="是否在职" width="80">
+            <el-table-column prop="dState" label="Status" width="100">
                 <template slot-scope="scope">
                     <el-tag type="success" v-if="scope.row.dState === 1"
-                        >在职</el-tag
+                        >On Duty</el-tag
                     >
-                    <el-tag type="danger" v-else>离职</el-tag>
+                    <el-tag type="danger" v-else>Resigned</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" width="260" fixed="right">
+            <el-table-column label="Actions" width="260" fixed="right">
                 <template slot-scope="scope">
                     <el-button
                         style="font-size: 18px;"
                         type="success"
                         @click="modifyDialog(scope.row.dId)"
-                    > 编辑</el-button>
+                    > Edit</el-button>
                     <el-button
                         style="font-size: 18px;"
                         type="danger"
                         @click="deleteDialog(scope.row.dId)"
-                    > 删除</el-button>
+                    > Delete</el-button>
                 </template>
             </el-table-column>
         </el-table>
 
-        <!-- 分页 -->
+        <!-- Pagination -->
         <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -103,34 +103,34 @@
             :total="total"
         >
         </el-pagination>
-        <!-- 增加医生对话框 -->
-        <el-dialog title="增加医生" :visible.sync="addFormVisible">
+        <!-- Add doctor dialog -->
+        <el-dialog title="Add Doctor" :visible.sync="addFormVisible">
             <el-form :model="addForm" :rules="rules" ref="ruleForm">
-                <el-form-item label="账号" label-width="80px" prop="dId">
+                <el-form-item label="Account" label-width="120px" prop="dId">
                     <el-input
                         v-model.number="addForm.dId"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="密码" label-width="80px">
+                <el-form-item label="Password" label-width="120px">
                     <el-input
                         v-model="addForm.dPassword"
                         autocomplete="off"
                         disabled
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="姓名" label-width="80px" prop="dName">
+                <el-form-item label="Name" label-width="120px" prop="dName">
                     <el-input
                         v-model="addForm.dName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="性别" label-width="80px">
-                    <el-radio v-model="addForm.dGender" label="男">男</el-radio>
-                    <el-radio v-model="addForm.dGender" label="女">女</el-radio>
+                <el-form-item label="Gender" label-width="120px">
+                    <el-radio v-model="addForm.dGender" label="Male">Male</el-radio>
+                    <el-radio v-model="addForm.dGender" label="Female">Female</el-radio>
                 </el-form-item>
-                <el-form-item label="职位" label-width="80px" prop="dPost">
-                    <el-select v-model="addForm.dPost" placeholder="请选择职称">
+                <el-form-item label="Title" label-width="120px" prop="dPost">
+                    <el-select v-model="addForm.dPost" placeholder="Please select title">
                         <el-option
                             v-for="post in posts"
                             :key="post"
@@ -140,11 +140,11 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="科室" label-width="80px" prop="dSection">
+                <el-form-item label="Department" label-width="120px" prop="dSection">
                     <el-select
                         v-model="addForm.dSection"
                         filterable
-                        placeholder="请选择科室"
+                        placeholder="Please select department"
                     >
                         <el-option
                             v-for="section in sections"
@@ -155,56 +155,56 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="身份证号" label-width="80px" prop="dCard">
+                <el-form-item label="ID Number" label-width="120px" prop="dCard">
                     <el-input
                         v-model="addForm.dCard"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="手机号" label-width="80px" prop="dPhone">
+                <el-form-item label="Phone" label-width="120px" prop="dPhone">
                     <el-input
                         v-model="addForm.dPhone"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" label-width="80px" prop="dEmail">
+                <el-form-item label="Email" label-width="120px" prop="dEmail">
                     <el-input
                         v-model="addForm.dEmail"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="挂号费" label-width="80px" prop="dPrice">
+                <el-form-item label="Fee" label-width="120px" prop="dPrice">
                     <el-input
                         v-model="addForm.dPrice"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item
-                    label="简介"
-                    label-width="80px"
+                    label="Bio"
+                    label-width="120px"
                     prop="dIntroduction"
                 >
                     <el-input
                         type="textarea"
                         :rows="5"
-                        placeholder="请输入内容"
+                        placeholder="Please enter content"
                         v-model="addForm.dIntroduction"
                     >
                     </el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="addFormVisible = false" style="font-size: 18px;"> 取 消</el-button>
+                <el-button @click="addFormVisible = false" style="font-size: 18px;"> Cancel</el-button>
                 <el-button type="primary" @click="addDoctor('ruleForm')"
-                    style="font-size: 18px;"> 确 定</el-button
+                    style="font-size: 18px;"> Confirm</el-button
                 >
             </div>
         </el-dialog>
 
-        <!-- 修改医生对话框 -->
-        <el-dialog title="修改医生信息" :visible.sync="modifyFormVisible">
+        <!-- Edit doctor dialog -->
+        <el-dialog title="Edit Doctor" :visible.sync="modifyFormVisible">
             <el-form :model="modifyForm" :rules="rules" ref="ruleForm">
-                <el-form-item label="账号" label-width="80px" prop="dId">
+                <el-form-item label="Account" label-width="120px" prop="dId">
                     <el-input
                         v-model.number="modifyForm.dId"
                         autocomplete="off"
@@ -212,24 +212,24 @@
                     ></el-input>
                 </el-form-item>
 
-                <el-form-item label="姓名" label-width="80px" prop="dName">
+                <el-form-item label="Name" label-width="120px" prop="dName">
                     <el-input
                         v-model="modifyForm.dName"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="性别" label-width="80px">
-                    <el-radio v-model="modifyForm.dGender" label="男"
-                        >男</el-radio
+                <el-form-item label="Gender" label-width="120px">
+                    <el-radio v-model="modifyForm.dGender" label="Male"
+                        >Male</el-radio
                     >
-                    <el-radio v-model="modifyForm.dGender" label="女"
-                        >女</el-radio
+                    <el-radio v-model="modifyForm.dGender" label="Female"
+                        >Female</el-radio
                     >
                 </el-form-item>
-                <el-form-item label="职位" label-width="80px" prop="dPost">
+                <el-form-item label="Title" label-width="120px" prop="dPost">
                     <el-select
                         v-model="modifyForm.dPost"
-                        placeholder="请选择职称"
+                        placeholder="Please select title"
                     >
                         <el-option
                             v-for="post in posts"
@@ -240,11 +240,11 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="科室" label-width="80px" prop="dSection">
+                <el-form-item label="Department" label-width="120px" prop="dSection">
                     <el-select
                         v-model="modifyForm.dSection"
                         filterable
-                        placeholder="请选择科室"
+                        placeholder="Please select department"
                     >
                         <el-option
                             v-for="section in sections"
@@ -255,44 +255,44 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="身份证号" label-width="80px" prop="dCard">
+                <el-form-item label="ID Number" label-width="120px" prop="dCard">
                     <el-input
                         v-model="modifyForm.dCard"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="手机号" label-width="80px" prop="dPhone">
+                <el-form-item label="Phone" label-width="120px" prop="dPhone">
                     <el-input
                         v-model="modifyForm.dPhone"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" label-width="80px" prop="dEmail">
+                <el-form-item label="Email" label-width="120px" prop="dEmail">
                     <el-input
                         v-model="modifyForm.dEmail"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="挂号费" label-width="80px" prop="dPrice">
+                <el-form-item label="Fee" label-width="120px" prop="dPrice">
                     <el-input
                         v-model="modifyForm.dPrice"
                         autocomplete="off"
                     ></el-input>
                 </el-form-item>
                 <el-form-item
-                    label="简介"
-                    label-width="80px"
+                    label="Bio"
+                    label-width="120px"
                     prop="dIntroduction"
                 >
                     <el-input
                         type="textarea"
                         :rows="5"
-                        placeholder="请输入内容"
+                        placeholder="Please enter content"
                         v-model="modifyForm.dIntroduction"
                     >
                     </el-input>
                 </el-form-item>
-                <el-form-item label="状态" label-width="80px" prop="dState">
+                <el-form-item label="Status" label-width="120px" prop="dState">
                     <el-input
                         v-model="modifyForm.dState"
                         autocomplete="off"
@@ -301,9 +301,9 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="modifyFormVisible = false" style="font-size: 18px;"> 取 消</el-button>
+                <el-button @click="modifyFormVisible = false" style="font-size: 18px;"> Cancel</el-button>
                 <el-button type="primary" @click="modifyDoctor('ruleForm')"
-                    style="font-size: 18px;"> 确 定</el-button
+                    style="font-size: 18px;"> Confirm</el-button
                 >
             </div>
         </el-dialog>
@@ -317,29 +317,29 @@ export default {
     data() {
         var validateMoblie = (rule, value, callback) => {
             if (value === undefined) {
-                callback(new Error("请输入手机号"));
+                callback(new Error("Please enter phone number"));
             } else {
                 let reg =
                     /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
                 if (!reg.test(value)) {
-                    callback(new Error("请输入合法的手机号"));
+                    callback(new Error("Please enter a valid phone number"));
                 }
                 callback();
             }
         };
         var validateCard = (rule, value, callback) => {
             if (value === undefined) {
-                callback(new Error("请输入身份证号"));
+                callback(new Error("Please enter ID number"));
             } else {
                 let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
                 if (!reg.test(value)) {
-                    callback(new Error("请输入合法的身份证号码"));
+                    callback(new Error("Please enter a valid ID number"));
                 }
                 callback();
             }
         };
         return {
-            //文件上传
+            // File upload
             fileList: [],
             pageNumber: 1,
             size: 8,
@@ -349,72 +349,72 @@ export default {
             addFormVisible: false,
             addForm: {
                 dPassword: 123456,
-                dGender: "男",
+                dGender: "Male",
             },
-            posts: ["主任医师", "副主任医师", "主治医生"],
+            posts: ["Chief Physician", "Associate Chief Physician", "Attending Physician"],
             sections: [
-                "神经内科",
-                "内分泌科",
-                "呼吸与危重症医学科",
-                "消化内科",
-                "心血管内科",
-                "发热门诊",
-                "手足外科",
-                "普通外科",
-                "肛肠外科",
-                "神经外科",
-                "骨科",
-                "烧伤整形外科",
-                "妇科",
-                "产科",
-                "儿科",
-                "耳鼻咽喉科",
-                "眼科",
-                "中医科",
-                "急诊科",
-                "皮肤病科",
-                "口腔科",
+                "Neurology",
+                "Endocrinology",
+                "Respiratory & Critical Care",
+                "Gastroenterology",
+                "Cardiology",
+                "Fever Clinic",
+                "Hand & Foot Surgery",
+                "General Surgery",
+                "Colorectal Surgery",
+                "Neurosurgery",
+                "Orthopedics",
+                "Burn & Plastic Surgery",
+                "Gynecology",
+                "Obstetrics",
+                "Pediatrics",
+                "ENT",
+                "Ophthalmology",
+                "TCM",
+                "Emergency",
+                "Dermatology",
+                "Stomatology",
             ],
             rules: {
                 dId: [
-                    { required: true, message: "请输入账号", trigger: "blur" },
+                    { required: true, message: "Please enter account", trigger: "blur" },
                     {
                         type: "number",
-                        message: "账号必须数字类型",
+                        message: "Account must be a number",
                         trigger: "blur",
                     },
                 ],
                 dName: [
-                    { required: true, message: "请输入姓名", trigger: "blur" },
+                    { required: true, message: "Please enter name", trigger: "blur" },
                     {
                         min: 2,
                         max: 5,
-                        message: "账号必须是2到5个字符",
+                        message: "Name must be 2 to 5 characters",
                         trigger: "blur",
                     },
                 ],
                 dPost: [
-                    { required: true, message: "请选择职位", trigger: "blur" },
+                    { required: true, message: "Please select title", trigger: "blur" },
                 ],
                 dSection: [
                     {
                         required: true,
-                        message: "请选择所属科室",
+                        message: "Please select department",
                         trigger: "blur",
                     },
                 ],
                 dEmail: [
-                    { required: true, message: "请输入邮箱", trigger: "blur" },
+                    { required: true, message: "Please enter email", trigger: "blur" },
                     {
                         type: "email",
-                        message: "请输入正确的邮箱地址",
+                        message: "Please enter a valid email address",
                         trigger: ["blur", "change"],
                     },
                 ],
                 dPrice: [
                     {
                         required: true,
-                        message: "请输入挂号费",
+                        message: "Please enter fee",
                         trigger: "blur",
                     },
                 ],
@@ -423,7 +423,7 @@ export default {
                 dIntroduction: [
                     {
                         required: true,
-                        message: "请输入您的个人简介",
+                        message: "Please enter bio",
                         trigger: "blur",
                     },
                 ],
@@ -433,28 +433,28 @@ export default {
         };
     },
     methods: {
-        //导出医生信息
+        // Export doctor data
         exportDoctors() {
-            window.location.href = "http://localhost:9281/doctor/downloadExcel";
+            window.location.href = "/hospital/doctor/downloadExcel";
         },
-        //文件上传
+        // File upload
         handleProgress() {
-            this.$message.warning("文件正在解析中！");
+            this.$message.warning("File is being parsed!");
         },
-        // 文件上传成功时的钩子
+        // File upload success hook
         handleSuccess() {
-            this.$message.success("数据导入成功！");
+            this.$message.success("Data imported successfully!");
             this.requestDoctors();
         },
         handleError() {
-            //this.$message.error("数据导入失败！");
-            this.$message.success("数据导入成功！");
+            //this.$message.error("Data import failed!");
+            this.$message.success("Data imported successfully!");
             this.requestDoctors();
         },
         handleExceed() {
-            this.$message.warning("当前限制选择 1 个文件");
+            this.$message.warning("Only 1 file can be selected");
         },
-        //点击修改医生信息
+        // Submit edited doctor
         modifyDoctor(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -475,10 +475,10 @@ export default {
                         })
                         .then((res) => {
                             if (res.data.status !== 200)
-                                return this.$message.error("修改信息失败！");
+                                return this.$message.error("Failed to update!");
                             this.modifyFormVisible = false;
                             this.requestDoctors();
-                            this.$message.success("修改医生信息成功！");
+                            this.$message.success("Doctor updated successfully!");
                             console.log(res);
                         });
                 } else {
@@ -487,7 +487,7 @@ export default {
                 }
             });
         },
-        //打开修改对话框
+        // Open edit dialog
         modifyDialog(id) {
             request
                 .get("hospital/admin/findDoctor", {
@@ -497,13 +497,13 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200)
-                        this.$message.error("请求数据失败");
+                        this.$message.error("Failed to load data");
                     this.modifyForm = res.data.data;
                     this.modifyFormVisible = true;
                     console.log(res);
                 });
         },
-        //删除医生操作
+        // Delete doctor
         deleteDoctor(id) {
             request
                 .get("hospital/admin/deleteDoctor", {
@@ -516,38 +516,38 @@ export default {
                     console.log(res);
                 });
         },
-        //删除对话框
+        // Delete dialog
         deleteDialog(id) {
-            this.$confirm("此操作将删除该医生信息, 是否继续?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm("Delete this doctor?", "Notice", {
+                confirmButtonText: "Confirm",
+                cancelButtonText: "Cancel",
                 type: "warning",
             })
                 .then(() => {
                     this.deleteDoctor(id);
                     this.$message({
                         type: "success",
-                        message: "删除成功!",
+                        message: "Deleted successfully!",
                     });
                 })
                 .catch(() => {
                     this.$message({
                         type: "info",
-                        message: "已取消删除",
+                        message: "Deletion cancelled",
                     });
                 });
         },
-        // 增加医生
+        // Add doctor
         addDoctor(formName) {
         
             
             if (!/^\d+$/.test(this.addForm.dId)) {
-                this.$message.error("账号有误，只能是纯数字，且长度不能超过9位。");
+                this.$message.error("Invalid account: digits only, max 9 characters.");
                 return;
             }
             if ((this.addForm.dId + "").length > 9) {
                 this.$message.error(
-                    "账号不能超过9位！"
+                    "Account cannot exceed 9 digits!"
                 );
                 return
             }
@@ -573,11 +573,11 @@ export default {
                         .then((res) => {
                             if (res.data.status !== 200)
                                 return this.$message.error(
-                                    "账号不合法或已被占用！"
+                                    "Invalid or occupied account!"
                                 );
                             this.addFormVisible = false;
                             this.requestDoctors();
-                            this.$message.success("增加医生成功！");
+                            this.$message.success("Doctor added successfully!");
                             console.log(res);
                         });
                 } else {
@@ -586,18 +586,18 @@ export default {
                 }
             });
         },
-        //页面大小改变时触发
+        // Triggered when page size changes
         handleSizeChange(size) {
             this.size = size;
             this.requestDoctors();
         },
-        //   页码改变时触发
+        // Triggered when page number changes
         handleCurrentChange(num) {
             console.log(num);
             this.pageNumber = num;
             this.requestDoctors();
         },
-        // 加载医生列表
+        // Load doctor list
         requestDoctors() {
             request
                 .get("hospital/admin/findAllDoctors", {

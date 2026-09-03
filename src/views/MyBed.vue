@@ -2,11 +2,11 @@
     <div>
         <el-card>
             <el-table :data="bedData" border stripe>
-                <el-table-column label="床号" prop="bId" v-model="bedData.bId"></el-table-column>
-                <el-table-column label="用户id" prop="pId" v-model="bedData.pId"></el-table-column>
-                <el-table-column label="医生id" prop="dId" v-model="bedData.dId"></el-table-column>
-                <el-table-column label="原因" prop="bReason" v-model="bedData.bReason"></el-table-column>
-                <el-table-column label="开始时间" prop="bStart" v-model="bedData.bStart"></el-table-column>
+                <el-table-column label="Bed No." prop="bId" v-model="bedData.bId"></el-table-column>
+                <el-table-column label="User ID" prop="pId" v-model="bedData.pId"></el-table-column>
+                <el-table-column label="Doctor ID" prop="dId" v-model="bedData.dId"></el-table-column>
+                <el-table-column label="Reason" prop="bReason" v-model="bedData.bReason"></el-table-column>
+                <el-table-column label="Start Time" prop="bStart" v-model="bedData.bStart"></el-table-column>
             </el-table>
         </el-card>
     </div>
@@ -24,21 +24,21 @@ export default {
         }
     },
     methods: {
-        //请求病床信息
+        // Request bed data
         requestBed(){
-            request.get("bed/findBedByPid", {
+            request.get("hospital/bed/findBedByPid", {
                 params: {
                     pId: this.userId
                 }
             })
             .then(res => {
                 if(res.data.status !== 200)
-                return this.$message.error("请求数据失败");
+                return this.$message.error("Failed to load data");
                 this.bedData = res.data.data;
             })
 
         },
-           //token解码
+           // Decode token
     tokenDecode(token){
       if (token !== null)
       return jwtDecode(token);
@@ -46,7 +46,7 @@ export default {
 
     },
     created(){
-           // 解码token
+           // Decode token
             this.userId = this.tokenDecode(getToken()).pId;
             this.requestBed();
     }

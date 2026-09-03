@@ -1,52 +1,52 @@
 <template>
-    <!-- 卡片 -->
+    <!-- Card -->
     <el-card>
-        <!-- 搜索栏 -->
+        <!-- Search bar -->
         <el-row type="flex">
             <el-col :span="6">
-                <el-input v-model="query" placeholder="请输入姓名查询">
+                <el-input v-model="query" placeholder="Search by name">
                     <el-button
                         slot="append"
                         style="font-size: 18px;"
                         @click="requestPatients"
-                    > 搜索</el-button>
+                    > Search</el-button>
                 </el-input>
             </el-col>
         </el-row>
-        <!-- 表格 -->
+        <!-- Table -->
         <el-table :data="patientData" stripe style="width: 100%" border>
-            <el-table-column prop="pId" label="账号" width="100">
+            <el-table-column prop="pId" label="Account" width="100">
             </el-table-column>
-            <el-table-column prop="pName" label="姓名" width="80">
+            <el-table-column prop="pName" label="Name" width="100">
             </el-table-column>
-            <el-table-column prop="pGender" label="性别" width="60">
+            <el-table-column prop="pGender" label="Gender" width="90">
             </el-table-column>
-            <el-table-column prop="pAge" label="年龄/岁" width="180">
+            <el-table-column prop="pAge" label="Age" width="80">
             </el-table-column>
-            <el-table-column prop="pCard" label="证件号"> </el-table-column>
-            <el-table-column prop="pPhone" label="手机号"> </el-table-column>
-            <el-table-column prop="pEmail" label="邮箱" width="170">
+            <el-table-column prop="pCard" label="ID Number"> </el-table-column>
+            <el-table-column prop="pPhone" label="Phone"> </el-table-column>
+            <el-table-column prop="pEmail" label="Email" width="170">
             </el-table-column>
-            <el-table-column prop="pState" label="状态" width="80">
+            <el-table-column prop="pState" label="Status" width="100">
                 <template slot-scope="scope">
                     <el-tag type="success" v-if="scope.row.pState === 1"
-                        >正常</el-tag
+                        >Active</el-tag
                     >
-                    <el-tag type="danger" v-else>已删除</el-tag>
+                    <el-tag type="danger" v-else>Deleted</el-tag>
                 </template>
             </el-table-column>
-            <el-table-column label="操作" width="160" fixed="right">
+            <el-table-column label="Actions" width="160" fixed="right">
                 <template slot-scope="scope">
                     <el-button
                         style="font-size: 18px"
                         type="danger"
                         @click="deleteDialog(scope.row.pId)"
-                    > 删除</el-button>
+                    > Delete</el-button>
                 </template>
             </el-table-column>
         </el-table>
 
-        <!-- 分页 -->
+        <!-- Pagination -->
         <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -75,7 +75,7 @@ export default {
         };
     },
     methods: {
-        //删除病人操作
+        // Delete patient
         deletePatient(id) {
             request
                 .get("hospital/admin/deletePatient", {
@@ -88,39 +88,39 @@ export default {
                     console.log(res);
                 });
         },
-        //删除对话框
+        // Delete dialog
         deleteDialog(id) {
-            this.$confirm("此操作将删除该患者信息, 是否继续?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm("Delete this patient?", "Notice", {
+                confirmButtonText: "Confirm",
+                cancelButtonText: "Cancel",
                 type: "warning",
             })
                 .then(() => {
                     this.deletePatient(id);
                     this.$message({
                         type: "success",
-                        message: "删除成功!",
+                        message: "Deleted successfully!",
                     });
                 })
                 .catch(() => {
                     this.$message({
                         type: "info",
-                        message: "已取消删除",
+                        message: "Deletion cancelled",
                     });
                 });
         },
-        //页面大小改变时触发
+        // Triggered when page size changes
         handleSizeChange(size) {
             this.size = size;
             this.requestPatients();
         },
-        //   页码改变时触发
+        // Triggered when page number changes
         handleCurrentChange(num) {
             console.log(num);
             this.pageNumber = num;
             this.requestPatients();
         },
-        // 加载患者列表
+        // Load patient list
         requestPatients() {
             request
                 .get("hospital/admin/findAllPatients", {

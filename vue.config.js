@@ -4,24 +4,24 @@
  * @Date: 2024-01-14 20:02:29
  */
 module.exports = {
-    lintOnSave: false, // 关闭eslint校验
+    lintOnSave: false, // Disable ESLint
     devServer: {
-        host: "139.224.72.73",
-        //host: "localhost",
-        port: 80,
+        //host: "139.224.72.73",
+        host: "localhost",
+        port: 8082,
         https: false,
         //proxy: "http://localhost:80",
         proxy: {
             '/': {
-                target: 'http://139.224.72.73:9281',
-                //target: 'http://localhost:9281',
+                //target: 'http://139.224.72.73:9281',
+                target: 'http://localhost:9092',
                 changeOrigin: true,
             },
         },
-        overlay: { // 关闭eslint校验
+        overlay: { // Disable ESLint
             warning: false,
             errors: false
         },
     }
 }
-//设置代理解决跨域问题
+// Set proxy to resolve CORS

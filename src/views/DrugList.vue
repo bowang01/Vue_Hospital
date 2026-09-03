@@ -1,16 +1,16 @@
 <template>
     <div>
-        <!-- 卡片 -->
+        <!-- Card -->
         <el-card>
-            <!-- 搜索栏及增加药物 -->
+            <!-- Search bar and add drug -->
             <el-row type="flex">
                 <el-col :span="6">
-                    <el-input v-model="query" placeholder="请输入名称查询">
+                    <el-input v-model="query" placeholder="Search by name">
                         <el-button
                             slot="append"
                             style="font-size: 18px;"
                             @click="requestDrugs"
-                        > 搜索</el-button>
+                        > Search</el-button>
                     </el-input>
                 </el-col>
                 <el-col :span="6"></el-col>
@@ -20,42 +20,42 @@
                         @click="addFormVisible = true"
                         style="font-size: 18px"
                     > 
-                        增加药物</el-button
+                        Add Drug</el-button
                     >
                 </el-col>
             </el-row>
-            <!-- 表格 -->
+            <!-- Table -->
             <el-table :data="drugData" stripe border>
-                <el-table-column label="编号" prop="drId" width="80"></el-table-column>
-                <el-table-column label="名称" prop="drName"></el-table-column>
+                <el-table-column label="ID" prop="drId" width="80"></el-table-column>
+                <el-table-column label="Name" prop="drName"></el-table-column>
                 <el-table-column
-                    label="剩余数量"
+                    label="Stock"
                     prop="drNumber"
                 ></el-table-column>
-                <el-table-column label="单位" width="100" prop="drUnit"></el-table-column>
-                <el-table-column label="单价" width="150" prop="drPrice"></el-table-column>
+                <el-table-column label="Unit" width="100" prop="drUnit"></el-table-column>
+                <el-table-column label="Unit Price" width="150" prop="drPrice"></el-table-column>
                 <el-table-column
                     width="300"
-                    label="出版商"
+                    label="Publisher"
                     prop="drPublisher"
                 ></el-table-column>
-                <el-table-column label="操作" width="290" fixed="right">
+                <el-table-column label="Actions" width="290" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             style="font-size: 18px"
                             type="success"
                             @click="modifyDialog(scope.row.drId)"
-                        > 编辑</el-button>
+                        > Edit</el-button>
                         <el-button
                             style="font-size: 18px"
                             type="danger"
                             @click="deleteDialog(scope.row.drId)"
-                        > 删除</el-button>
+                        > Delete</el-button>
                     </template>
                 </el-table-column>
             </el-table>
 
-            <!-- 分页 -->
+            <!-- Pagination -->
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -69,91 +69,91 @@
             </el-pagination>
         </el-card>
 
-        <!-- 增加药物对话框 -->
-        <el-dialog title="增加药物" :visible.sync="addFormVisible">
+        <!-- Add drug dialog -->
+        <el-dialog title="Add Drug" :visible.sync="addFormVisible">
             <el-form :model="addForm" :rules="rules" ref="ruleForm">
-                <el-form-item label="编号" prop="drId" label-width="80px">
+                <el-form-item label="ID" prop="drId" label-width="120px">
                     <el-input v-model.number="addForm.drId"></el-input>
                 </el-form-item>
-                <el-form-item label="名称" prop="drName" label-width="80px">
+                <el-form-item label="Name" prop="drName" label-width="120px">
                     <el-input v-model="addForm.drName"></el-input>
                 </el-form-item>
-                <el-form-item label="数量" prop="drNumber" label-width="80px">
+                <el-form-item label="Quantity" prop="drNumber" label-width="120px">
                     <el-input-number
                         v-model="addForm.drNumber"
                         :min="0"
                         :max="1000"
                     ></el-input-number>
                 </el-form-item>
-                <el-form-item label="单位" prop="drUnit" label-width="80px">
-                    <el-radio v-model="addForm.drUnit" label="盒">盒</el-radio>
-                    <el-radio v-model="addForm.drUnit" label="袋">袋</el-radio>
-                    <el-radio v-model="addForm.drUnit" label="剂">剂</el-radio>
+                <el-form-item label="Unit" prop="drUnit" label-width="120px">
+                    <el-radio v-model="addForm.drUnit" label="Box">Box</el-radio>
+                    <el-radio v-model="addForm.drUnit" label="Bag">Bag</el-radio>
+                    <el-radio v-model="addForm.drUnit" label="Dose">Dose</el-radio>
                 </el-form-item>
-                <el-form-item label="单价" prop="drPrice" label-width="80px">
+                <el-form-item label="Unit Price" prop="drPrice" label-width="120px">
                     <el-input v-model="addForm.drPrice"></el-input>
                 </el-form-item>
                 <el-form-item
-                    label="出版商"
+                    label="Publisher"
                     prop="drPublisher"
-                    label-width="80px"
+                    label-width="120px"
                 >
                     <el-input v-model="addForm.drPublisher"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="addFormVisible = false" style="font-size: 18px;"> 取 消</el-button>
+                <el-button @click="addFormVisible = false" style="font-size: 18px;"> Cancel</el-button>
                 <el-button type="primary" @click="addDrug('ruleForm')"
-                    style="font-size: 18px;"> 确 定</el-button
+                    style="font-size: 18px;"> Confirm</el-button
                 >
             </div>
         </el-dialog>
 
-        <!-- 修改药物对话框 -->
-        <el-dialog title="修改药物" :visible.sync="modifyFormVisible">
+        <!-- Edit drug dialog -->
+        <el-dialog title="Edit Drug" :visible.sync="modifyFormVisible">
             <el-form :model="modifyForm" :rules="rules" ref="ruleForm">
-                <el-form-item label="编号" prop="drId" label-width="80px">
+                <el-form-item label="ID" prop="drId" label-width="120px">
                     <el-input
                         v-model.number="modifyForm.drId"
                         disabled
                     ></el-input>
                 </el-form-item>
-                <el-form-item label="名称" prop="drName" label-width="80px">
+                <el-form-item label="Name" prop="drName" label-width="120px">
                     <el-input v-model="modifyForm.drName"></el-input>
                 </el-form-item>
-                <el-form-item label="数量" prop="drNumber" label-width="80px">
+                <el-form-item label="Quantity" prop="drNumber" label-width="120px">
                     <el-input-number
                         v-model="modifyForm.drNumber"
                         :min="0"
                         :max="1000"
                     ></el-input-number>
                 </el-form-item>
-                <el-form-item label="单位" prop="drUnit" label-width="80px">
-                    <el-radio v-model="modifyForm.drUnit" label="盒"
-                        >盒</el-radio
+                <el-form-item label="Unit" prop="drUnit" label-width="120px">
+                    <el-radio v-model="modifyForm.drUnit" label="Box"
+                        >Box</el-radio
                     >
-                    <el-radio v-model="modifyForm.drUnit" label="袋"
-                        >袋</el-radio
+                    <el-radio v-model="modifyForm.drUnit" label="Bag"
+                        >Bag</el-radio
                     >
-                    <el-radio v-model="modifyForm.drUnit" label="剂"
-                        >剂</el-radio
+                    <el-radio v-model="modifyForm.drUnit" label="Dose"
+                        >Dose</el-radio
                     >
                 </el-form-item>
-                <el-form-item label="单价" prop="drPrice" label-width="80px">
+                <el-form-item label="Unit Price" prop="drPrice" label-width="120px">
                     <el-input v-model="modifyForm.drPrice"></el-input>
                 </el-form-item>
                 <el-form-item
-                    label="出版商"
+                    label="Publisher"
                     prop="drPublisher"
-                    label-width="80px"
+                    label-width="120px"
                 >
                     <el-input v-model="modifyForm.drPublisher"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="modifyFormVisible = false" style="font-size: 18px;"> 取 消</el-button>
+                <el-button @click="modifyFormVisible = false" style="font-size: 18px;"> Cancel</el-button>
                 <el-button type="primary" @click="modifyDrug('ruleForm')"
-                    style="font-size: 18px;"> 确 定</el-button
+                    style="font-size: 18px;"> Confirm</el-button
                 >
             </div>
         </el-dialog>
@@ -175,38 +175,38 @@ export default {
             addForm: {},
             rules: {
                 drId: [
-                    { required: true, message: "请输入编号", trigger: "blur" },
+                    { required: true, message: "Please enter ID", trigger: "blur" },
                     {
                         type: "number",
-                        message: "账号必须数字类型",
+                        message: "ID must be a number",
                         trigger: "blur",
                     },
                 ],
                 drName: [
-                    { required: true, message: "请输入名称", trigger: "blur" },
+                    { required: true, message: "Please enter name", trigger: "blur" },
                     {
                         min: 1,
                         max: 50,
-                        message: "账号必须是1到50个字符",
+                        message: "Name must be 1 to 50 characters",
                         trigger: "blur",
                     },
                 ],
                 drUnit: [
-                    { required: true, message: "请选择单位", trigger: "blur" },
+                    { required: true, message: "Please select unit", trigger: "blur" },
                 ],
                 drPrice: [
-                    { required: true, message: "请输入单价", trigger: "blur" },
+                    { required: true, message: "Please enter unit price", trigger: "blur" },
                 ],
                 drPublisher: [
                     {
                         required: true,
-                        message: "请输入出版商",
+                        message: "Please enter publisher",
                         trigger: "blur",
                     },
                     {
                         min: 1,
                         max: 50,
-                        message: "账号必须是1到50个字符",
+                        message: "Publisher must be 1 to 50 characters",
                         trigger: "blur",
                     },
                 ],
@@ -216,7 +216,7 @@ export default {
         };
     },
     methods: {
-        //点击修改药物信息
+        // Submit edited drug
         modifyDrug(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -233,10 +233,10 @@ export default {
                         })
                         .then((res) => {
                             if (res.data.status !== 200)
-                                return this.$message.error("修改信息失败！");
+                                return this.$message.error("Failed to update!");
                             this.modifyFormVisible = false;
                             this.requestDrugs();
-                            this.$message.success("修改药物信息成功！");
+                            this.$message.success("Drug updated successfully!");
                             console.log(res);
                         });
                 } else {
@@ -245,7 +245,7 @@ export default {
                 }
             });
         },
-        //打开修改对话框
+        // Open edit dialog
         modifyDialog(id) {
             request
                 .get("hospital/drug/findDrug", {
@@ -255,13 +255,13 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200)
-                        return this.$message.error("请求数据失败");
+                        return this.$message.error("Failed to load data");
                     this.modifyForm = res.data.data;
                     this.modifyFormVisible = true;
                     console.log(res);
                 });
         },
-        //删除药物操作
+        // Delete drug
         deleteDrug(id) {
             request
                 .get("hospital/drug/deleteDrug", {
@@ -274,28 +274,28 @@ export default {
                     console.log(res);
                 });
         },
-        //删除对话框
+        // Delete dialog
         deleteDialog(id) {
-            this.$confirm("此操作将删除该药物信息, 是否继续?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
+            this.$confirm("Delete this drug?", "Notice", {
+                confirmButtonText: "Confirm",
+                cancelButtonText: "Cancel",
                 type: "warning",
             })
                 .then(() => {
                     this.deleteDrug(id);
                     this.$message({
                         type: "success",
-                        message: "删除成功!",
+                        message: "Deleted successfully!",
                     });
                 })
                 .catch(() => {
                     this.$message({
                         type: "info",
-                        message: "已取消删除",
+                        message: "Deletion cancelled",
                     });
                 });
         },
-        //点击增加确认按钮
+        // Confirm add
         addDrug(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
@@ -313,11 +313,11 @@ export default {
                         .then((res) => {
                             if (res.data.status !== 200)
                                 return this.$message.error(
-                                    "编号不合法或已被占用！"
+                                    "Invalid or occupied ID!"
                                 );
                             this.addFormVisible = false;
                             this.requestDrugs();
-                            this.$message.success("增加医生成功！");
+                            this.$message.success("Drug added successfully!");
                             console.log(res);
                         });
                 } else {
@@ -326,18 +326,18 @@ export default {
                 }
             });
         },
-        //页面大小改变时触发
+        // Triggered when page size changes
         handleSizeChange(size) {
             this.size = size;
             this.requestDrugs();
         },
-        //   页码改变时触发
+        // Triggered when page number changes
         handleCurrentChange(num) {
             console.log(num);
             this.pageNumber = num;
             this.requestDrugs();
         },
-        // 加载医生列表
+        // Load drug list
         requestDrugs() {
             request
                 .get("hospital/drug/findAllDrugs", {

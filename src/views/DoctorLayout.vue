@@ -1,30 +1,21 @@
-<!--
- * @Description: 
- * @Author: 
- * @Date: 2024-01-14 20:02:29
--->
 <template>
-    <div>
-        <div class="indexPeople">
-            <div class="userImage">
-                <i class="iconfont icon-r-user2" style="font-size: 132px"></i>
-            </div>
-
-            <div class="userFont">
-                <div class="spanCure">
-                    <span>就诊概况</span>
+    <div class="dash">
+        <div class="dash-hero">
+            <h2>Doctor Dashboard</h2>
+            <p>Review your appointments for today</p>
+        </div>
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="iconfont icon-r-user2"></i>
                 </div>
-                <div class="spanPeople">
-                    <span>今天我的预约人数：{{ orderPeople }}</span>
+                <div>
+                    <div class="stat-label">Visit Overview</div>
+                    <div class="stat-value">{{ orderPeople }}</div>
+                    <div class="stat-hint">My appointments today</div>
                 </div>
             </div>
         </div>
-
-        <el-row>
-            <el-col :span="24">
-                <img src="@/assets/back.jpg" style="width: 941px;margin-left: 25px;">
-            </el-col>
-        </el-row>
     </div>
 </template>
 <script>
@@ -41,7 +32,6 @@ export default {
         };
     },
     methods: {
-        //token解码
         tokenDecode(token) {
             if (token !== null) return jwtDecode(token);
         },
@@ -54,7 +44,7 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200)
-                        return this.$message.error("数据请求失败");
+                        return this.$message.error("Failed to load data");
                     this.orderPeople = res.data.data;
                 });
         },
@@ -63,42 +53,5 @@ export default {
         this.userId = this.tokenDecode(getToken()).dId;
         this.requestPeople();
     },
-    mounted() {
-        
-    }
 };
 </script>
-<style lang="scss" scoped>
-.userFont {
-    height: 150px;
-    width: 250px;
-    color: white;
-    float: right;
-    .spanCure {
-        font-size: 15px;
-        margin-top: 60px;
-        margin-bottom: 15px;
-    }
-    .spanPeople {
-        font-size: 18px;
-    }
-}
-
-.userImage {
-    height: 150px;
-    width: 150px;
-    font-size: 130px;
-    color: white;
-    float: left;
-    position: relative;
-    left: 40px;
-    top: 10px;
-}
-.indexPeople {
-    height: 200px;
-    width: 500px;
-    background: #58b9ae;
-    margin-top: 50px;
-    margin-left: 30px;
-}
-</style>

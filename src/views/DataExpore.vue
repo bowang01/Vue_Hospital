@@ -1,11 +1,9 @@
 <template>
   <div class="Echarts">
-    <div id="orderPeople" style="width: 1200px; height: 400px;"></div>
-    <div id="orderSection" style="width: 1200px; height: 400px;"></div>
-    <div id="orderGender" style="width: 540px; height: 500px;float:left"></div>
-    <div id="patientAge" style="width: 600px; height: 500px;float:right"></div>
-
-
+    <div id="orderPeople" class="chart-wide"></div>
+    <div id="orderSection" class="chart-wide"></div>
+    <div id="orderGender" class="chart-pie"></div>
+    <div id="patientAge" class="chart-pie"></div>
   </div>
 </template>
 <script>
@@ -19,14 +17,14 @@ export default {
     };
   },
   methods: {
-    //统计患者年龄分布
+    // Patient age distribution
     patientAge() {
       var myChart = this.$echarts.init(document.getElementById("patientAge"));
-      request.get("patient/patientAge")
+      request.get("hospital/patient/patientAge")
         .then(res => {
           var option = {
             title: {
-              text: '患者年龄段分布',
+              text: 'Patient Age Distribution',
               left: 'center'
             },
             tooltip: {
@@ -38,7 +36,7 @@ export default {
             },
             series: [
               {
-                name: '年龄段',
+                name: 'Age group',
                 type: 'pie',
                 radius: ['40%', '70%'],
                 avoidLabelOverlap: false,
@@ -62,16 +60,16 @@ export default {
                   show: false
                 },
                 data: [
-                  { value: res.data.data[0], name: '0-9岁' },
-                  { value: res.data.data[1], name: '10-19岁' },
-                  { value: res.data.data[2], name: '20-29岁' },
-                  { value: res.data.data[3], name: '30-39岁' },
-                  { value: res.data.data[4], name: '40-49岁' },
-                  { value: res.data.data[5], name: '50-59岁' },
-                  { value: res.data.data[6], name: '60-69岁' },
-                  { value: res.data.data[7], name: '70-79岁' },
-                  { value: res.data.data[8], name: '80-89岁' },
-                  { value: res.data.data[9], name: '90-99岁' },
+                  { value: res.data.data[0], name: '0-9' },
+                  { value: res.data.data[1], name: '10-19' },
+                  { value: res.data.data[2], name: '20-29' },
+                  { value: res.data.data[3], name: '30-39' },
+                  { value: res.data.data[4], name: '40-49' },
+                  { value: res.data.data[5], name: '50-59' },
+                  { value: res.data.data[6], name: '60-69' },
+                  { value: res.data.data[7], name: '70-79' },
+                  { value: res.data.data[8], name: '80-89' },
+                  { value: res.data.data[9], name: '90-99' },
                 ]
               }
             ]
@@ -79,7 +77,7 @@ export default {
 
 
 
-          // 使用刚指定的配置项和数据显示图表。
+          // Render the chart with the specified options.
           myChart.setOption(option);
 
 
@@ -88,20 +86,20 @@ export default {
           console.error(err);
         })
     },
-    //统计挂号科室人数
+    // Appointments by department
     orderSection() {
       var myChart = this.$echarts.init(document.getElementById("orderSection"));
-      request.get("order/orderSection")
+      request.get("hospital/order/orderSection")
         .then(res => {
           var option = {
             title: {
-              text: '近20天挂号科室人数统计',
+              text: 'Appointments by Department (Last 20 Days)',
               left: 'center'
             },
             xAxis: {
               type: 'category',
               data: res.data.data.map((item) => item.doctor.dSection),
-              axisLabel: {//解决各个不显示问题
+              axisLabel: {// Fix labels not showing
                 interval: 0,
                 rotate: 10,
               }
@@ -119,7 +117,7 @@ export default {
               }
             }]
           };
-          // 使用刚指定的配置项和数据显示图表。
+          // Render the chart with the specified options.
           myChart.setOption(option);
 
         })
@@ -127,14 +125,14 @@ export default {
           console.error(err);
         })
     },
-    //挂号男女比例
+    // Patient gender ratio
     orderGender() {
       var myChart = this.$echarts.init(document.getElementById("orderGender"));
-      request.get("order/orderGender",)
+      request.get("hospital/order/orderGender",)
         .then(res => {
           var option = {
             title: {
-              text: '患者性别比例',
+              text: 'Patient Gender Ratio',
               left: 'center'
             },
             tooltip: {
@@ -146,7 +144,7 @@ export default {
             },
             series: [
               {
-                name: '人数',
+                name: 'Count',
                 type: 'pie',
                 radius: '50%',
                 data: [
@@ -164,7 +162,7 @@ export default {
               }
             ]
           };
-          // 使用刚指定的配置项和数据显示图表。
+          // Render the chart with the specified options.
           myChart.setOption(option);
 
         })
@@ -174,25 +172,25 @@ export default {
 
 
     },
-    //获取过去num天日期
+    // Get date from num days ago
     pastSeven(num) {
       var date = new Date();
       date.setDate(date.getDate() - num);
       var time = date.getMonth() + 1 + "-" + date.getDate();
       return time;
     },
-    // 近20天挂号人数统计折线图
+    // Appointments in the last 20 days line chart
     orderPeople() {
       var myChart = this.$echarts.init(document.getElementById("orderPeople"));
       request
         .get("hospital/order/orderSeven")
         .then((res) => {
           if (res.data.status !== 200)
-            return this.$message.error("数据请求失败！");
+            return this.$message.error("Failed to load data");
           console.log(this.sevenDate)
           var option = {
             title: {
-              text: "近20天挂号人数折线图",
+              text: "Appointments in the Last 20 Days",
               left: "5%",
             },
             xAxis: {
@@ -210,7 +208,7 @@ export default {
               },
             ],
           };
-          // 使用刚指定的配置项和数据显示图表。
+          // Render the chart with the specified options.
           myChart.setOption(option);
         })
         .catch((err) => {
@@ -225,7 +223,7 @@ export default {
     this.patientAge();
   },
   created() {
-    //以今日为中点，获取前后10天共20天的日期
+    // Centered on today, get 20 days (10 before and 10 after)
     for (var i = 10; i > -10; i--) {
       this.sevenDate.push(this.pastSeven(i));
     }
@@ -233,4 +231,21 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.Echarts {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.chart-wide {
+  width: 100%;
+  min-width: 720px;
+  height: 400px;
+}
+.chart-pie {
+  width: 48%;
+  min-width: 360px;
+  height: 500px;
+  display: inline-block;
+  vertical-align: top;
+}
+</style>

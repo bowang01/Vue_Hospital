@@ -1,86 +1,86 @@
 <template>
     <div>
         <el-card>
-            <!-- 搜索栏 -->
+            <!-- Search bar -->
             <el-row type="flex">
                 <el-col :span="6">
-                    <el-input v-model="query" placeholder="请输入患者id查询">
+                    <el-input v-model="query" placeholder="Search by patient ID">
                         <el-button
                             slot="append"
                             style="font-size: 18px;"
                             @click="requestOrders"
-                        > 查询</el-button>
+                        > Search</el-button>
                     </el-input>
                 </el-col>
             </el-row>
             <el-table :data="orderData" stripe style="width: 100%" border>
                 <el-table-column
                     prop="oId"
-                    label="挂号单号"
-                    width="80px"
+                    label="Appointment No."
+                    width="140px"
                 ></el-table-column>
                 <el-table-column
                     prop="dId"
-                    label="本人id"
+                    label="My ID"
                     width="80px"
                 ></el-table-column>
 
-                <el-table-column prop="pId" label="患者id" width="100px">
+                <el-table-column prop="pId" label="Patient ID" width="100px">
                 </el-table-column>
 
                 <el-table-column
                     prop="oStart"
-                    label="挂号时间"
+                    label="Appointment Time"
                     width="190px"
                 ></el-table-column>
                 <el-table-column
                     prop="oEnd"
-                    label="结束时间"
+                    label="End Time"
                     width="180px"
                 ></el-table-column>
                 <el-table-column
                     prop="oRecord"
-                    label="病因"
+                    label="Diagnosis"
                     width="400px"
                 ></el-table-column>
                 <el-table-column
                     prop="oDrug"
-                    label="药物"
+                    label="Drugs"
                     width="180px"
                 ></el-table-column>
                 <el-table-column
                     prop="oCheck"
-                    label="检查项目"
+                    label="Exam Items"
                     width="180px"
                 ></el-table-column>
                 <el-table-column
                     prop="oTotalPrice"
-                    label="需交费用/元"
-                    width="80px"
+                    label="Fee (CNY)"
+                    width="100px"
                 ></el-table-column>
                 <el-table-column
                     prop="oPriceState"
-                    label="缴费状态"
+                    label="Payment"
                     width="100px"
                 >
                     <template slot-scope="scope">
                         <el-tag
                             type="success"
                             v-if="scope.row.oPriceState === 1"
-                            >已缴费</el-tag
+                            >Paid</el-tag
                         >
-                        <!-- <el-tag type="danger" v-if="scope.row.oPriceState === 0 && scope.row.oState === 1">未缴费</el-tag> -->
+                        <!-- <el-tag type="danger" v-if="scope.row.oPriceState === 0 && scope.row.oState === 1">Unpaid</el-tag> -->
                         <el-tag
                             type="danger"
                             v-if="
                                 scope.row.oPriceState === 0 &&
                                 scope.row.oState === 1
                             "
-                            >未缴费</el-tag
+                            >Unpaid</el-tag
                         >
                     </template>
                 </el-table-column>
-                <el-table-column prop="oState" label="挂号状态" width="100px">
+                <el-table-column prop="oState" label="Status" width="100px">
                     <template slot-scope="scope">
                         <el-tag
                             type="success"
@@ -88,18 +88,18 @@
                                 scope.row.oState === 1 &&
                                 scope.row.oPriceState === 1
                             "
-                            >已完成</el-tag
+                            >Completed</el-tag
                         >
                         <el-tag
                             type="danger"
                             v-if="
                                 scope.row.oState === 0 && scope.row.oState === 0
                             "
-                            >未完成</el-tag
+                            >Incomplete</el-tag
                         >
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="140" fixed="right">
+                <el-table-column label="Actions" width="160" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="warning"
@@ -109,13 +109,13 @@
                                 scope.row.oState === 1 &&
                                 scope.row.oPriceState === 1
                             "
-                            ><i class="iconfont icon-r-yes" style="font-size: 22px;"></i> 追诊</el-button
+                            ><i class="iconfont icon-r-yes" style="font-size: 22px;"></i> Follow-up</el-button
                         >
                     </template>
                 </el-table-column>
             </el-table>
 
-            <!-- 分页 -->
+            <!-- Pagination -->
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -148,7 +148,7 @@ export default {
         };
     },
     methods: {
-        //点击追诊按钮
+        // Follow-up button
         dealClick(oId, pId) {
             this.$router.push({
                 path: "/dealOrderAgain",
@@ -158,20 +158,20 @@ export default {
                 },
             });
         },
-        //页面大小改变时触发
+        // Triggered when page size changes
         handleSizeChange(size) {
             console.log(size);
             this.size = size;
             this.requestOrders();
         },
-        //   页码改变时触发
+        // Triggered when page number changes
         handleCurrentChange(num) {
             console.log(num);
             this.pageNumber = num;
             this.requestOrders();
         },
 
-        //请求挂号信息
+        // Request appointment data
         requestOrders() {
             request
                 .get("hospital/order/findOrderByDid", {
@@ -185,19 +185,19 @@ export default {
                 .then((res) => {
                     
                     if (res.data.status !== 200)
-                        this.$message.error("请求数据失败");
+                        this.$message.error("Failed to load data");
                     this.orderData = res.data.data.orders;
                     this.total = res.data.data.total;
 
                 });
         },
-        //token解码
+        // Decode token
         tokenDecode(token) {
             if (token !== null) return jwtDecode(token);
         },
     },
     created() {
-        // 解码token
+        // Decode token
         //this.orderData.pName = this.tokenDecode(getToken()).pName;
         //this.orderData.pCard = this.tokenDecode(getToken()).pCard;
         this.userId = this.tokenDecode(getToken()).dId;

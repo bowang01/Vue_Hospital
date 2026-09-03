@@ -1,10 +1,10 @@
 <template>
     <div>
         <el-card>
-            <!-- 搜索栏 -->
+            <!-- Search bar -->
             <el-row type="flex">
                 <el-col :span="6">
-                    <el-input v-model="query" placeholder="请输入患者id查询">
+                    <el-input v-model="query" placeholder="Search by patient ID">
                         <el-button
                             slot="append"
                             icon="iconfont icon-r-find"
@@ -14,38 +14,38 @@
                 </el-col>
             </el-row>
             <el-table :data="orderData" stripe border>
-                <el-table-column label="挂号单号" prop="oId"></el-table-column>
-                <el-table-column label="患者id" prop="pId"></el-table-column>
-                <el-table-column label="医生id" prop="dId"></el-table-column>
-                <!-- <el-table-column label="医生姓名" prop="dName"></el-table-column> -->
+                <el-table-column label="Appointment No." prop="oId"></el-table-column>
+                <el-table-column label="Patient ID" prop="pId"></el-table-column>
+                <el-table-column label="Doctor ID" prop="dId"></el-table-column>
+                <!-- <el-table-column label="Doctor Name" prop="dName"></el-table-column> -->
                 <el-table-column
-                    label="挂号时间"
+                    label="Appointment Time"
                     prop="oStart"
                 ></el-table-column>
-                <el-table-column label="结束时间" prop="oEnd"></el-table-column>
-                <el-table-column label="挂号状态" prop="oState">
+                <el-table-column label="End Time" prop="oEnd"></el-table-column>
+                <el-table-column label="Status" prop="oState">
                     <template slot-scope="scope">
                         <el-tag v-if="scope.row.oState === 1" type="success"
-                            >已完成</el-tag
+                            >Completed</el-tag
                         >
                         <el-tag v-if="scope.row.oState === 0" type="danger"
-                            >未完成</el-tag
+                            >Incomplete</el-tag
                         >
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" width="180" fixed="right">
+                <el-table-column label="Actions" width="230" fixed="right">
                     <template slot-scope="scope">
                         <el-button
                             type="warning"
                             style="font-size: 18px"
                             @click="BedDiag(scope.row.pId, scope.row.dId)"
                         >
-                             申请住院</el-button
+                             Apply for Admission</el-button
                         >
                     </template>
                 </el-table-column>
             </el-table>
-            <!-- 分页 -->
+            <!-- Pagination -->
             <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
@@ -58,16 +58,16 @@
             >
             </el-pagination>
         </el-card>
-        <!-- 住院对话框 -->
-        <el-dialog title="申请住院" :visible.sync="BedFormVisible">
+        <!-- Admission dialog -->
+        <el-dialog title="Apply for Admission" :visible.sync="BedFormVisible">
             <el-form class="findPassword" :model="bedForm">
-                <el-form-item label="患者账号" label-width="80px" prop="pId">
+                <el-form-item label="Patient Account" label-width="140px" prop="pId">
                     <el-input v-model="bedForm.pId" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="医生账号" label-width="80px">
+                <el-form-item label="Doctor Account" label-width="140px">
                     <el-input v-model="bedForm.dId" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="申请原因" label-width="80px">
+                <el-form-item label="Reason" label-width="140px">
                     <el-input
                         v-model="bedForm.bReason"
                         type="textarea"
@@ -75,7 +75,7 @@
                     ></el-input>
                 </el-form-item>
 
-                <el-form-item label="病床号" label-width="80px" prop="bId">
+                <el-form-item label="Bed No." label-width="140px" prop="bId">
                     <el-select v-model="bedForm.bId">
                         <el-option
                             v-for="item in nullBed"
@@ -88,8 +88,8 @@
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="BedFormVisible = false" style="font-size: 18px;"> 取 消</el-button>
-                <el-button type="primary" @click="bedClick" style="font-size: 18px;"> 确 定</el-button>
+                <el-button @click="BedFormVisible = false" style="font-size: 18px;"> Cancel</el-button>
+                <el-button type="primary" @click="bedClick" style="font-size: 18px;"> Confirm</el-button>
             </div>
         </el-dialog>
     </div>
@@ -110,14 +110,14 @@ export default {
             query: "",
             total: 3,
             orderData: [],
-            //申请住院对话框
+            // Admission application dialog
             BedFormVisible: false,
             bedForm: {},
             nullBed: [],
         };
     },
     methods: {
-        //点击申请床位确认按钮
+        // Confirm bed application
         bedClick() {
             request
                 .get("hospital/bed/updateBed", {
@@ -130,22 +130,22 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200)
-                        return this.$message.error("来晚了...该床位已被占用");
+                        return this.$message.error("Too late, this bed is already occupied");
                     this.BedFormVisible = false;
-                    this.$message.success("申请住院成功！");
+                    this.$message.success("Admission application submitted successfully");
                     this.requestOrders();
                     console.log(res);
                 });
         },
 
-        //请求所有空床位
+        // Request all vacant beds
         requestBeds() {
             request
                 .get("hospital/bed/findNullBed")
                 .then((res) => {
                     
                     if (res.data.status !== 200)
-                        return this.$message.error("数据请求失败");
+                        return this.$message.error("Failed to load data");
                     this.nullBed = res.data.data;
                     console.log(res.data.data);
                 })
@@ -153,26 +153,26 @@ export default {
                     console.error(err);
                 });
         },
-        //打开申请住院对话框
+        // Open admission dialog
         BedDiag(pId, dId) {
             this.bedForm.pId = pId;
             this.bedForm.dId = dId;
             this.BedFormVisible = true;
             this.requestBeds();
         },
-        //页面大小改变时触发
+        // Triggered when page size changes
         handleSizeChange(size) {
             console.log(size);
             this.size = size;
             this.requestOrders();
         },
-        //   页码改变时触发
+        // Triggered when page number changes
         handleCurrentChange(num) {
             console.log(num);
             this.pageNumber = num;
             this.requestOrders();
         },
-        //获取已完成的订单信息
+        // Get completed order data
         requestOrders() {
             request
                 .get("hospital/order/findOrderFinish", {
@@ -185,23 +185,23 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200)
-                        return this.$message.error("数据请求失败");
+                        return this.$message.error("Failed to load data");
                     this.orderData = res.data.data.orders;
                     this.total = res.data.data.total;
                 });
         },
-        //token解码
+        // Decode token
         tokenDecode(token) {
             if (token !== null) return jwtDecode(token);
         },
     },
     created() {
-        //解码token信息
+        // Decode token
         this.userId = this.tokenDecode(getToken()).dId;
         this.userName = this.tokenDecode(getToken()).dName;
         console.log(this.userId);
         console.log(this.userName);
-        //获取订单信息
+        // Get order data
         this.requestOrders();
     },
 };

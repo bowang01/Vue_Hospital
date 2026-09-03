@@ -3,7 +3,7 @@
         <el-card shadow="hover">
             <table>
                 <tr>
-                    <td style="">姓名：</td>
+                    <td style="">Name:</td>
                     <td>
                         <el-input
                             disabled
@@ -12,13 +12,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>账号：</td>
+                    <td>Account:</td>
                     <td>
                         <el-input disabled v-model="doctorData.dId"></el-input>
                     </td>
                 </tr>
                 <tr>
-                    <td>性别：</td>
+                    <td>Gender:</td>
                     <td>
                         <el-input
                             disabled
@@ -27,7 +27,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>手机号：</td>
+                    <td>Phone:</td>
                     <td>
                         <el-input
                             disabled
@@ -36,7 +36,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>身份证号：</td>
+                    <td>ID Number:</td>
                     <td>
                         <el-input
                             disabled
@@ -45,7 +45,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>邮箱：</td>
+                    <td>Email:</td>
                     <td>
                         <el-input
                             disabled
@@ -54,7 +54,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>职位：</td>
+                    <td>Title:</td>
                     <td>
                         <el-input
                             disabled
@@ -63,7 +63,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>所属科室：</td>
+                    <td>Department:</td>
                     <td>
                         <el-input
                             disabled
@@ -72,7 +72,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>挂号价格：</td>
+                    <td>Fee:</td>
                     <td>
                         <el-input
                             disabled
@@ -81,7 +81,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>评分：</td>
+                    <td>Rating:</td>
                     <td>
                         <el-input
                             disabled
@@ -90,7 +90,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>简介：</td>
+                    <td>Bio:</td>
                     <td>
                         <el-input
                             disabled
@@ -117,7 +117,7 @@ export default {
         };
     },
     methods: {
-        //请求医生信息
+        // Request doctor data
         requestDoctor() {
             request
                 .get("hospital/admin/findDoctor", {
@@ -127,17 +127,17 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status != 200)
-                        return this.$message.error("获取数据失败");
+                        return this.$message.error("Failed to load data");
                     this.doctorData = res.data.data;
                 });
         },
-        //token解码
+        // Decode token
         tokenDecode(token) {
             if (token !== null) return jwtDecode(token);
         },
     },
     created() {
-        //解码token信息
+        // Decode token
         this.userId = this.tokenDecode(getToken()).dId;
         this.requestDoctor();
         console.log(this.userId);
@@ -148,5 +148,11 @@ export default {
 td, th {
   white-space: nowrap;
   padding: 10px;
+}
+td:first-child {
+  min-width: 130px;
+  width: 140px;
+  text-align: right;
+  color: #606266;
 }
 </style>

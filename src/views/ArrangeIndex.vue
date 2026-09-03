@@ -8,7 +8,7 @@
         <el-card>
             <div>
                 <div id="arrangeIndex" style="font-size: 18px;">
-                    请选择值班日期：
+                    Select duty date:
                 </div>
                 <br />
                 <ul class="dateUl">
@@ -44,7 +44,7 @@ export default {
     },
 
     methods: {
-        //日历点击
+        // Calendar click
         dateClick(monthDay) {
             console.log(monthDay);
 
@@ -58,7 +58,7 @@ export default {
             if (this.$route.path !== "/sectionIndex")
                 this.$router.push("sectionIndex");
         },
-        //获取当天及后7天的日期星期
+        // Get today and the next 7 days
         nowDay(num) {
             var nowDate = new Date();
             nowDate.setDate(nowDate.getDate() + num);
@@ -78,10 +78,10 @@ export default {
         
     },
     created() {
-        //获取当天的后7天
+        // Get today and the next 7 days
         for (var i = 0; i < 25; i++) {
             this.nowDay(i);
-            //  获取激活路径
+            // Get active path
             this.activePath = getActivePath();
         }
     },
@@ -92,7 +92,7 @@ export default {
     background-color: #ddd;
     border-color: #ddd;
     color: black;
-    cursor: not-allowed; // 鼠标变化
+    cursor: not-allowed; // Change cursor
     pointer-events: none;
 }
 .router-view {

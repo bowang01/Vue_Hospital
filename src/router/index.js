@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import ElementUI from 'element-ui';
+import locale from 'element-ui/lib/locale/lang/en';
 import 'element-ui/lib/theme-chalk/index.css';
 import "@/utils/initialize";
 import "@/assets/css/global.css";
@@ -31,13 +32,13 @@ import ArrangeDoctor from "@/views/ArrangeDoctor.vue";
 import MyBed from "@/views/MyBed.vue";
 import BedList from "@/views/BedList.vue";
 import DataExpore from "@/views/DataExpore.vue";
-import echarts from 'echarts';//引入echarts
+import echarts from 'echarts';// Import echarts
 import DealOrderAgain from "@/views/DealOrderAgain.vue";
 import DoctorCard from "@/views/DoctorCard.vue";
 import PatientCard from "@/views/PatientCard.vue"
 
-Vue.prototype.$echarts = echarts;//引入echarts
-Vue.use(ElementUI);
+Vue.prototype.$echarts = echarts;// Import echarts
+Vue.use(ElementUI, { locale });
 Vue.use(VueRouter);
 
 const routes = [
@@ -48,56 +49,56 @@ const routes = [
   },
   {
     path: "/login",
-    //redirect: "/login",//设置默认跳转路径
+    //redirect: "/login",// Set default redirect path
     component: Login
   },
   {
     path: "/admin",
     component: Admin,
     meta: {
-      requireAuth: true,  // 该路由项需要权限校验
+      requireAuth: true,  // This route requires auth
     },
     children:[
       {
         path: "/adminLayout",
         component: AdminLayout,
         meta: {
-          requireAuth: true,  // 该路由项需要权限校验
+          requireAuth: true,  // This route requires auth
         },
       },
       {
       path: "/doctorList",
       component: DoctorList,
       meta: {
-        requireAuth: true,  // 该路由项需要权限校验
+        requireAuth: true,  // This route requires auth
       },
     },
     {
       path: "/patientList",
       component: PatientList,
       meta: {
-        requireAuth: true,  // 该路由项需要权限校验
+        requireAuth: true,  // This route requires auth
       },
     },
     {
       path: "/orderList",
       component: OrderList,
       meta: {
-        requireAuth: true,  // 该路由项需要权限校验
+        requireAuth: true,  // This route requires auth
       },
     },
     {
       path: "/drugList",
       component: DrugList,
       meta: {
-        requireAuth: true,  // 该路由项需要权限校验
+        requireAuth: true,  // This route requires auth
       },
     },
     {
       path: "/checkList",
       component: CheckList,
       meta: {
-        requireAuth: true,  // 该路由项需要权限校验
+        requireAuth: true,  // This route requires auth
       },
       
     },
@@ -105,7 +106,7 @@ const routes = [
       path: "/bedList",
       component: BedList,
       meta: {
-        requireAuth: true,  // 该路由项需要权限校验
+        requireAuth: true,  // This route requires auth
       },
       
     },
@@ -113,7 +114,7 @@ const routes = [
       path: "/dataExpore",
       component: DataExpore,
       meta: {
-        requireAuth: true,  // 该路由项需要权限校验
+        requireAuth: true,  // This route requires auth
       },
       
     },
@@ -121,21 +122,21 @@ const routes = [
       path: "/arrangeIndex",
       component: ArrangeIndex,
       meta: {
-        requireAuth: true,  // 该路由项需要权限校验
+        requireAuth: true,  // This route requires auth
       },
       children:[
         {
           path: "/sectionIndex",
           component: SectionIndex,
           meta: {
-            requireAuth: true,  // 该路由项需要权限校验
+            requireAuth: true,  // This route requires auth
           },
         },
         {
           path: "/arrangeDoctor",
           component: ArrangeDoctor,
           meta: {
-            requireAuth: true,  // 该路由项需要权限校验
+            requireAuth: true,  // This route requires auth
           },
         },
       ]
@@ -145,7 +146,7 @@ const routes = [
       path: "/sectionList",
       component: SectionList,
       meta: {
-        requireAuth: true,  // 该路由项需要权限校验
+        requireAuth: true,  // This route requires auth
       },
      
       
@@ -156,14 +157,14 @@ const routes = [
     path: "/patient",
     component: Patient,
     meta: {
-      requireAuth: true,  // 该路由项需要权限校验
+      requireAuth: true,  // This route requires auth
     },
     children:[
       {
         path: "/patientLayout",
         component: PatientLayout,
         meta: {
-          requireAuth: true,  // 该路由项需要权限校验
+          requireAuth: true,  // This route requires auth
         },
       },
       {
@@ -192,14 +193,14 @@ const routes = [
     path: "/doctor",
     component: Doctor,
     meta: {
-      requireAuth: true,  // 该路由项需要权限校验
+      requireAuth: true,  // This route requires auth
     },
     children:[
       {
         path: "/doctorLayout",
         component: DoctorLayout,
         meta: {
-          requireAuth: true,  // 该路由项需要权限校验
+          requireAuth: true,  // This route requires auth
         },
       },
       {
@@ -234,12 +235,12 @@ const routes = [
 const router = new VueRouter({
   routes
 });
-//没登录的情况下，访问任何一个页面都会返回登录页面
+// Redirect to login if not authenticated
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     const token = getToken();
     if (token !== null) {
-      //直接放行
+      // Allow access
       next();
   } else {
       next("/login");
@@ -249,5 +250,4 @@ router.beforeEach((to, from, next) => {
     next();
   }
   });
-import 'vue-vibe'
 export default router;

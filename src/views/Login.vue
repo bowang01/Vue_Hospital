@@ -1,81 +1,79 @@
 <template>
     <div class="login-index" :style="backgroundDiv">
+        <div class="login-mask"></div>
         <div class="mid-index">
-            <i style="
-                    top: 40px;
-                    font-size: 28px;
-                    left: 20px;
-                    position: absolute;
-                " class="iconfont icon-r-love">
-                登录医院管理系统
-            </i>
+            <div class="login-title">
+                <i class="iconfont icon-r-love"></i>
+                <div>
+                    <h1>Hospital Management</h1>
+                    <p>Sign in to continue</p>
+                </div>
+            </div>
             <el-form :model="loginForm" :rules="loginRules" ref="ruleForm" class="loginForm">
                 <el-form-item prop="id">
-                    <!--必须绑定v-model输入框才能输入字符---->
-                    <el-input v-model="loginForm.id">
-                        <i slot="prefix" class="iconfont icon-r-user1" style="font-size: 22px"></i>
+                    <el-input v-model="loginForm.id" placeholder="Account ID" size="large">
+                        <i slot="prefix" class="iconfont icon-r-user1"></i>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input v-model="loginForm.password" show-password>
-                        <i slot="prefix" class="iconfont icon-r-lock" style="font-size: 22px"></i>
+                    <el-input v-model="loginForm.password" show-password placeholder="Password" size="large">
+                        <i slot="prefix" class="iconfont icon-r-lock"></i>
                     </el-input>
                 </el-form-item>
 
-                <!-- 角色单选框 -->
                 <el-form-item class="role">
                     <el-radio-group v-model="role" size="small">
-                        <el-radio label="患者"></el-radio>
-                        <el-radio label="医生"></el-radio>
-                        <el-radio label="管理员"></el-radio>
+                        <el-radio-button label="Patient"></el-radio-button>
+                        <el-radio-button label="Doctor"></el-radio-button>
+                        <el-radio-button label="Admin"></el-radio-button>
                     </el-radio-group>
                 </el-form-item>
 
                 <el-form-item class="btns">
-                    <el-button type="primary" style="font-size: 22px" @click="submitLoginForm('ruleForm')">
-                        登录</el-button>
-                    <el-button type="info" style="font-size: 22px" @click="registerFormVisible = true">
-                        注册新账号</el-button>
+                    <el-button type="primary" class="login-btn" @click="submitLoginForm('ruleForm')">
+                        Login</el-button>
+                    <el-button class="login-btn" @click="registerFormVisible = true">
+                        Register</el-button>
                 </el-form-item>
             </el-form>
         </div>
 
-        <!-- 注册对话框 -->
-        <el-dialog title="用户注册" :visible.sync="registerFormVisible">
+        <!-- Registration dialog -->
+        <el-dialog title="User Registration" :visible.sync="registerFormVisible">
             <el-form class="findPassword" :model="registerForm" :rules="registerRules" ref="registerForm">
-                <el-form-item label="账号" label-width="80px" prop="pId">
+                <el-form-item label="Account" label-width="110px" prop="pId">
                     <el-input v-model.number="registerForm.pId"></el-input>
                 </el-form-item>
-                <el-form-item label="性别" label-width="80px">
-                    <el-radio v-model="registerForm.pGender" label="男">男</el-radio>
-                    <el-radio v-model="registerForm.pGender" label="女">女</el-radio>
+                <el-form-item label="Gender" label-width="110px">
+                    <el-radio v-model="registerForm.pGender" label="Male">Male</el-radio>
+                    <el-radio v-model="registerForm.pGender" label="Female">Female</el-radio>
                 </el-form-item>
-                <el-form-item label="密码" label-width="80px" prop="pPassword">
+                <el-form-item label="Password" label-width="110px" prop="pPassword">
                     <el-input v-model="registerForm.pPassword"></el-input>
                 </el-form-item>
-                <el-form-item label="姓名" label-width="80px" prop="pName">
+                <el-form-item label="Name" label-width="110px" prop="pName">
                     <el-input v-model="registerForm.pName"></el-input>
                 </el-form-item>
-                <el-form-item label="出生日期" label-width="80px" prop="pBirthday">
-                    <el-date-picker v-model="registerForm.pBirthday" type="date" placeholder="选择日期"
+                <el-form-item label="Birthday" label-width="110px" prop="pBirthday">
+                    <el-date-picker v-model="registerForm.pBirthday" type="date" placeholder="Select date"
                         value-format="yyyy-MM-dd">
                     </el-date-picker>
                 </el-form-item>
-                <el-form-item label="手机号" label-width="80px" prop="pPhone">
+                <el-form-item label="Phone" label-width="110px" prop="pPhone">
                     <el-input v-model="registerForm.pPhone"></el-input>
                 </el-form-item>
-                <el-form-item label="邮箱" label-width="80px" prop="pEmail">
+                <el-form-item label="Email" label-width="110px" prop="pEmail">
                     <el-input v-model="registerForm.pEmail"></el-input>
                 </el-form-item>
-                <el-form-item label="身份证号" label-width="80px" prop="pCard">
+                <el-form-item label="ID Card" label-width="110px" prop="pCard">
                     <el-input v-model="registerForm.pCard"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="registerFormVisible = false" style="font-size: 18px">
-                    取 消</el-button>
+                    Cancel</el-button>
                 <el-button type="primary" @click="registerClick('registerForm')" style="font-size: 18px">
-                    确 定</el-button>
+                    Confirm</el-button>
             </div>
         </el-dialog>
     </div>
@@ -91,30 +89,30 @@ export default {
     data() {
         var validateMoblie = (rule, value, callback) => {
             if (value === undefined) {
-                callback(new Error("请输入手机号"));
+                callback(new Error("Please enter phone number"));
             } else {
                 let reg =
                     /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
                 if (!reg.test(value)) {
-                    callback(new Error("请输入合法的手机号"));
+                    callback(new Error("Please enter a valid phone number"));
                 }
                 callback();
             }
         };
         var validateCard = (rule, value, callback) => {
             if (value === undefined) {
-                callback(new Error("请输入身份证号"));
+                callback(new Error("Please enter ID card"));
             } else {
                 let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
                 if (!reg.test(value)) {
-                    callback(new Error("请输入合法的身份证号码"));
+                    callback(new Error("Please enter a valid ID card number"));
                 }
                 callback();
             }
         };
         var validatePass = (rule, value, callback) => {
             if (value === "") {
-                callback(new Error("请输入密码"));
+                callback(new Error("Please enter password"));
             } else {
                 if (this.findForm.checkPassword !== "") {
                     this.$refs.findForm.validateField("checkPassword");
@@ -124,15 +122,15 @@ export default {
         };
         var validatePass2 = (rule, value, callback) => {
             if (value === "") {
-                callback(new Error("请再次输入密码"));
+                callback(new Error("Please enter password again"));
             } else if (value !== this.findForm.newPassword) {
-                callback(new Error("两次输入密码不一致!"));
+                callback(new Error("The two passwords do not match"));
             } else {
                 callback();
             }
         };
         return {
-            //背景图片
+            // Background image
             backgroundDiv: {
                 backgroundImage:
                     "url(" + require("../assets/doctor.jpeg") + ")",
@@ -147,23 +145,23 @@ export default {
                 id: [
                     {
                         required: true,
-                        message: "请输入账号编号",
+                        message: "Please enter account ID",
                         trigger: "blur",
                     },
                     {
                         min: 3,
                         max: 50,
-                        message: "长度在 3到 50 个字符",
+                        message: "Length must be 3 to 50 characters",
                         trigger: "blur",
                     },
                 ],
                 password: [
-                    { required: true, message: "请输入密码", trigger: "blur" },
+                    { required: true, message: "Please enter password", trigger: "blur" },
                 ],
             },
-            role: "患者",
-            findRole: "患者",
-            //找回密码
+            role: "Patient",
+            findRole: "Patient",
+            // Recover password
             findFormVisible: false,
             findForm: {
                 code: "",
@@ -176,19 +174,19 @@ export default {
                 pEmail: [
                     {
                         required: true,
-                        message: "请输入邮箱地址",
+                        message: "Please enter email",
                         trigger: "blur",
                     },
                     {
                         type: "email",
-                        message: "请输入正确的邮箱地址",
+                        message: "Please enter a valid email",
                         trigger: ["blur", "change"],
                     },
                 ],
                 code: [
                     {
                         required: true,
-                        message: "请输入验证码",
+                        message: "Please enter verification code",
                         trigger: "blur",
                     },
                 ],
@@ -196,45 +194,45 @@ export default {
                 checkPassword: [{ validator: validatePass2, trigger: "blur" }],
             },
             totalTime: 60,
-            content: "发送验证码",
+            content: "Send code",
             canClick: true,
-            //注册
+            // Registration
             registerFormVisible: false,
             registerForm: {
-                pGender: "男",
+                pGender: "Male",
             },
             registerRules: {
                 pId: [
-                    { required: true, message: "请输入账号", trigger: "blur" },
+                    { required: true, message: "Please enter account ID", trigger: "blur" },
                     {
                         type: "number",
-                        message: "账号必须数字类型",
+                        message: "Account must be numeric",
                         trigger: "blur",
                     },
                 ],
                 pPassword: [
-                    { required: true, message: "请输入密码", trigger: "blur" },
+                    { required: true, message: "Please enter password", trigger: "blur" },
                     {
                         min: 4,
                         max: 50,
-                        message: "长度在 4到 50 个字符",
+                        message: "Length must be 4 to 50 characters",
                         trigger: "blur",
                     },
                 ],
                 pName: [
-                    { required: true, message: "请输入姓名", trigger: "blur" },
+                    { required: true, message: "Please enter name", trigger: "blur" },
                     {
                         min: 2,
                         max: 8,
-                        message: "长度在 2到 8 个字符",
+                        message: "Length must be 2 to 8 characters",
                         trigger: "blur",
                     },
                 ],
                 pEmail: [
-                    { required: true, message: "请输入邮箱", trigger: "blur" },
+                    { required: true, message: "Please enter email", trigger: "blur" },
                     {
                         type: "email",
-                        message: "请输入正确的邮箱地址",
+                        message: "Please enter a valid email",
                         trigger: ["blur", "change"],
                     },
                 ],
@@ -243,7 +241,7 @@ export default {
                 pBirthday: [
                     {
                         required: true,
-                        message: "选择出生日期",
+                        message: "Select birthday",
                         trigger: "blur",
                     },
                 ],
@@ -254,15 +252,15 @@ export default {
 
     },
     methods: {
-        //点击注册确认按钮
+        // Click register confirm button
         registerClick(formName) {
             if (!/^\d+$/.test(this.registerForm.pId)) {
-                this.$message.error("账号有误，只能是纯数字，且长度不能超过9位。");
+                this.$message.error("Account must be digits only and no more than 9 characters");
                 return;
             }
             if ((this.registerForm.pId + "").length > 9) {
                 this.$message.error(
-                    "账号不能超过9位！"
+                    "Account cannot exceed 9 characters"
                 );
                 return
             }
@@ -284,10 +282,10 @@ export default {
                         .then((res) => {
                             if (res.data.status !== 200)
                                 return this.$message.error(
-                                    "账号或邮箱已被占用！"
+                                    "Account or email is already taken"
                                 );
                             this.registerFormVisible = false;
-                            this.$message.success("注册成功！");
+                            this.$message.success("Registered successfully");
                             console.log(res);
                         });
                 } else {
@@ -296,15 +294,15 @@ export default {
                 }
             });
         },
-        //提交表单
+        // Submit form
         submitLoginForm(formName) {
             if (!/^\d+$/.test(this.loginForm.id)) {
-                this.$message.error("账号有误，只能是纯数字");
+                this.$message.error("Account must be digits only");
                 return;
             }
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    if (this.role === "管理员") {
+                    if (this.role === "Admin") {
                         var params = new URLSearchParams();
                         params.append("aId", this.loginForm.id);
                         params.append("aPassword", this.loginForm.password);
@@ -315,7 +313,7 @@ export default {
                                 console.log(res);
                                 if (res.data.status != 200)
                                     return this.$message.error(
-                                        "用户名或密码错误"
+                                        "Incorrect username or password"
                                     );
                                 setToken(res.data.data.token);
                                 this.$router.push("/adminLayout");
@@ -342,7 +340,7 @@ export default {
                                 }
                             });
                     }
-                    if (this.role === "医生") {
+                    if (this.role === "Doctor") {
                         var params1 = new URLSearchParams();
                         params1.append("dId", this.loginForm.id);
                         params1.append("dPassword", this.loginForm.password);
@@ -353,7 +351,7 @@ export default {
                                 console.log(res);
                                 if (res.data.status != 200)
                                     return this.$message.error(
-                                        "用户名或密码错误"
+                                        "Incorrect username or password"
                                     );
                                 setToken(res.data.data.token);
                                 this.$router.push("/doctorLayout");
@@ -380,7 +378,7 @@ export default {
                                 }
                             });
                     }
-                    if (this.role === "患者") {
+                    if (this.role === "Patient") {
                         var params2 = new URLSearchParams();
                         params2.append("pId", this.loginForm.id);
                         params2.append("pPassword", this.loginForm.password);
@@ -391,7 +389,7 @@ export default {
                                 console.log(res);
                                 if (res.data.status != 200)
                                     return this.$message.error(
-                                        "用户名或密码错误"
+                                        "Incorrect username or password"
                                     );
                                 setToken(res.data.data.token);
                                 this.$router.push("/patientLayout");
@@ -439,65 +437,83 @@ export default {
 }
 
 .login-index {
-    background: #2b4b6b;
     height: 100%;
     position: relative;
+    background-position: center;
+    background-size: cover;
+}
+
+.login-mask {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, rgba(11, 43, 52, 0.72), rgba(13, 148, 136, 0.45));
 }
 
 .mid-index {
-    opacity: 0.9;
-    width: 450px;
-    height: 390px;
-    background: white;
-    //绝对定位，相对于最左上角来说
-    position: absolute;
-    left: 70%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.logo-index {
-    background: white;
-    height: 130px;
-    width: 130px;
-    border-radius: 50%;
-    padding: 10px;
-    //子绝父相,使一个div悬挂在另一个div上中间
+    width: 440px;
+    background: rgba(255, 255, 255, 0.96);
     position: absolute;
     left: 50%;
-    top: 0;
+    top: 50%;
     transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    padding: 36px 32px 28px;
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+}
 
-    border: 1px solid #eee;
-    box-shadow: 0px 0px 10px #ddd;
-
-    img {
-        height: 100%;
-        width: 100%;
-        border-radius: 50%;
-        background: #eeeeee;
+.login-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    i {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: #0d9488;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+    h1 {
+        font-size: 22px;
+        line-height: 1.2;
+        color: #0f172a;
+    }
+    p {
+        margin-top: 4px;
+        font-size: 13px;
+        color: #64748b;
     }
 }
 
 .loginForm {
-    margin-top: 120px;
+    margin-top: 0;
 }
 
-.el-form-item {
-    margin-left: 20px;
-    margin-right: 20px;
+.loginForm .el-input__prefix i {
+    font-size: 18px;
+    color: #0d9488;
 }
 
-//角色单选
 .role {
-    margin-left: 90px;
-    margin-right: 90px;
+    text-align: center;
 }
 
-//按钮
-.btns {
+.btns .el-form-item__content {
     display: flex;
-    justify-content: flex-end;
-    height: 25px;
+    width: 100%;
+    gap: 10px;
+}
+
+.login-btn {
+    flex: 1;
+    width: 50%;
+    margin-left: 0 !important;
+    height: 40px;
+    padding: 0 16px;
 }
 </style>

@@ -1,15 +1,15 @@
 <template>
     <div>
-        <!-- 面包屑 -->
+        <!-- Breadcrumb -->
         <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/sectionIndex' }"
-                >返回科室</el-breadcrumb-item
+                >Back to Departments</el-breadcrumb-item
             >
             <el-breadcrumb-item>{{ section }}</el-breadcrumb-item>
         </el-breadcrumb>
         <el-input
             v-model="query"
-            placeholder="请输入姓名查询"
+            placeholder="Search by name"
             class="doctorInput"
         >
             <el-button
@@ -20,31 +20,31 @@
         </el-input>
         <el-table :data="doctorData" border>
             <el-table-column
-                label="账号"
+                label="Account"
                 prop="dId"
                 v-model="doctorData.dId"
             ></el-table-column>
             <el-table-column
-                label="姓名"
+                label="Name"
                 prop="dName"
                 v-model="doctorData.dName"
             ></el-table-column>
             <el-table-column
-                label="性别"
+                label="Gender"
                 prop="dGender"
                 v-model="doctorData.dGender"
             ></el-table-column>
             <el-table-column
-                label="职位"
+                label="Title"
                 prop="dPost"
                 v-model="doctorData.dPost"
             ></el-table-column>
             <el-table-column
-                label="部门"
+                label="Department"
                 prop="dSection"
                 v-model="doctorData.dSection"
             ></el-table-column>
-            <el-table-column label="操作" prop="dSection" width="180" fixed="right">
+            <el-table-column label="Actions" prop="dSection" width="180" fixed="right">
                 <template slot-scope="scope">
                     <el-button
                         v-if="scope.row.arrangeId == null"
@@ -52,7 +52,7 @@
                         style="font-size: 18px"
                         @click="arrangeClick(scope.row.dId)"
                     >
-                        排班</el-button
+                        Schedule</el-button
                     >
                     <el-button
                         v-if="scope.row.arrangeId != null"
@@ -60,12 +60,12 @@
                         style="font-size: 18px"
                         @click="deleteArrange(scope.row.arrangeId)"
                     >
-                        取消排班</el-button
+                        Unschedule</el-button
                     >
                 </template>
             </el-table-column>
         </el-table>
-        <!-- 分页 -->
+        <!-- Pagination -->
         <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -95,7 +95,7 @@ export default {
         };
     },
     methods: {
-        //排班点击
+        // Schedule click
         arrangeClick(dId) {
             request
                 .get("hospital/arrange/addArrange", {
@@ -107,8 +107,8 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200)
-                        return this.$message.error("已排班");
-                    this.$message.success("排班成功！");
+                        return this.$message.error("Already scheduled");
+                    this.$message.success("Scheduled successfully!");
                     this.requestDoctors();
                 })
                 .catch((e) => {
@@ -128,23 +128,23 @@ export default {
                 })
                 .then((res) => {
                     if (res.data.status !== 200)
-                        return this.$message.error("排班信息不存在");
-                    this.$message.success("删除排班信息成功！");
+                        return this.$message.error("Schedule not found");
+                    this.$message.success("Schedule deleted successfully!");
                     this.requestDoctors();
                 });
         },
-        //页面大小改变时触发
+        // Triggered when page size changes
         handleSizeChange(size) {
             this.size = size;
             this.requestDoctors();
         },
-        //   页码改变时触发
+        // Triggered when page number changes
         handleCurrentChange(num) {
             console.log(num);
             this.pageNumber = num;
             this.requestDoctors();
         },
-        //根据部门请求医生信息
+        // Request doctors by department
         requestDoctors() {
             request
                 .get("hospital/doctor/findDoctorBySectionPage", {
@@ -159,7 +159,7 @@ export default {
                 .then((res) => {
                     console.log(res.data);
                     if (res.data.status !== 200)
-                        return this.$message.error("数据请求失败");
+                        return this.$message.error("Failed to load data");
                     this.doctorData = res.data.data.doctors;
                     this.total = res.data.data.total;
                     

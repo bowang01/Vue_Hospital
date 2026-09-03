@@ -1,17 +1,17 @@
 import axios from "axios"
 import {getToken} from "@/utils/storage.js";
 
-//全局定义一个单例的axios对象
+// Create a singleton axios instance
 const request = axios.create({
   baseURL: "",
   timeout: 8000
 });
-//全局拦截器，所有请求都会先执行这个
+// Global interceptor, runs before every request
 request.interceptors.request.use(config => {
   // Do something before request is sent
   const token = getToken();
   if(token !== null){
-      //在请求的头部加入token
+      // Attach token to request headers
       config.headers["token"] = token;
   }
   return config;
@@ -19,5 +19,5 @@ request.interceptors.request.use(config => {
   // Do something with request error
   return Promise.reject(error);
   });
-// 导出axios对象
+// Export axios instance
 export default request;
