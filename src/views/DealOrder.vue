@@ -126,7 +126,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-tag>Total: {{ drugTotalPrice }} CNY</el-tag>
+          <el-tag>Total: {{ drugTotalPrice }} NZD</el-tag>
         </el-col>
       </el-row>
       <!-- Exam items -->
@@ -188,7 +188,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <el-tag>Total: {{ checkTotalPrice }} CNY</el-tag>
+          <el-tag>Total: {{ checkTotalPrice }} NZD</el-tag>
         </el-col>
       </el-row>
     </el-card>
@@ -306,7 +306,7 @@ export default {
           this.drugBuyData[i].drName +
           "*" +
           this.drugBuyData[i].drPrice +
-          "(CNY)*" +
+          "(NZD)*" +
           this.drugBuyData[i].drNum +
           " ";
       }
@@ -315,10 +315,10 @@ export default {
           this.checkBuyData[i].chName +
           "*" +
           this.checkBuyData[i].chPrice +
-          "(CNY) ";
+          "(NZD) ";
       }
-      oCheck += " Exam total" + this.checkTotalPrice + "CNY ";
-      oDrug += " Drug total" + this.drugTotalPrice + "CNY ";
+      oCheck += " Exam total" + this.checkTotalPrice + "NZD ";
+      oDrug += " Drug total" + this.drugTotalPrice + "NZD ";
       oTotalPrice = this.checkTotalPrice + this.drugTotalPrice;
       return { oId, oRecord, oDrug, oCheck, oTotalPrice };
     },

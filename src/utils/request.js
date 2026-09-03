@@ -8,7 +8,10 @@ const request = axios.create({
 });
 // Global interceptor, runs before every request
 request.interceptors.request.use(config => {
-  // Do something before request is sent
+  if (config.url && !/^https?:\/\//i.test(config.url)) {
+    const path = config.url.replace(/^\/?hospital\/?/, "");
+    config.url = "/hospital/" + path.replace(/^\//, "");
+  }
   const token = getToken();
   if(token !== null){
       // Attach token to request headers

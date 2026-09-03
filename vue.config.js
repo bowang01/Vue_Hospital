@@ -20,12 +20,13 @@ module.exports = {
         host: "localhost",
         port: 8082,
         https: false,
-        //proxy: "http://localhost:80",
         proxy: {
-            '/': {
-                //target: 'http://139.224.72.73:9281',
-                target: 'http://localhost:9092',
+            "/hospital": {
+                target: "http://localhost:9092",
                 changeOrigin: true,
+                pathRewrite: {
+                    "^/hospital": "",
+                },
             },
         },
         overlay: { // Disable ESLint

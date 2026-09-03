@@ -36,7 +36,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>ID Number:</td>
+                    <td>MCNZ No.:</td>
                     <td>
                         <el-input
                             disabled

@@ -65,7 +65,7 @@
                 <el-form-item label="Email" label-width="110px" prop="pEmail">
                     <el-input v-model="registerForm.pEmail"></el-input>
                 </el-form-item>
-                <el-form-item label="ID Card" label-width="110px" prop="pCard">
+                <el-form-item label="NHI" label-width="110px" prop="pCard">
                     <el-input v-model="registerForm.pCard"></el-input>
                 </el-form-item>
             </el-form>
@@ -87,29 +87,6 @@ import { setToken } from "@/utils/storage.js";
 export default {
     name: "Login",
     data() {
-        var validateMoblie = (rule, value, callback) => {
-            if (value === undefined) {
-                callback(new Error("Please enter phone number"));
-            } else {
-                let reg =
-                    /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
-                if (!reg.test(value)) {
-                    callback(new Error("Please enter a valid phone number"));
-                }
-                callback();
-            }
-        };
-        var validateCard = (rule, value, callback) => {
-            if (value === undefined) {
-                callback(new Error("Please enter ID card"));
-            } else {
-                let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-                if (!reg.test(value)) {
-                    callback(new Error("Please enter a valid ID card number"));
-                }
-                callback();
-            }
-        };
         var validatePass = (rule, value, callback) => {
             if (value === "") {
                 callback(new Error("Please enter password"));
@@ -221,12 +198,6 @@ export default {
                 ],
                 pName: [
                     { required: true, message: "Please enter name", trigger: "blur" },
-                    {
-                        min: 2,
-                        max: 8,
-                        message: "Length must be 2 to 8 characters",
-                        trigger: "blur",
-                    },
                 ],
                 pEmail: [
                     { required: true, message: "Please enter email", trigger: "blur" },
@@ -236,8 +207,6 @@ export default {
                         trigger: ["blur", "change"],
                     },
                 ],
-                pPhone: [{ validator: validateMoblie }],
-                pCard: [{ validator: validateCard }],
                 pBirthday: [
                     {
                         required: true,
@@ -282,7 +251,7 @@ export default {
                         .then((res) => {
                             if (res.data.status !== 200)
                                 return this.$message.error(
-                                    "Account or email is already taken"
+                                    res.data.msg || "Account or email is already taken"
                                 );
                             this.registerFormVisible = false;
                             this.$message.success("Registered successfully");

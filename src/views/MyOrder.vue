@@ -40,7 +40,7 @@
                 ></el-table-column>
                 <el-table-column
                     prop="oTotalPrice"
-                    label="Fee (CNY)"
+                    label="Fee (NZD)"
                     width="100px"
                 ></el-table-column>
                 <el-table-column

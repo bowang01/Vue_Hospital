@@ -24,7 +24,7 @@
                  <td><el-input disabled v-model="patientData.pPhone"></el-input></td>
             </tr>
             <tr>
-                <td>ID Number:</td>
+                <td>NHI:</td>
                  <td><el-input disabled v-model="patientData.pCard"></el-input></td>
             </tr>
             <tr>

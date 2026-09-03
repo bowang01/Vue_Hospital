@@ -29,7 +29,7 @@
                 <el-table-column label="ID" prop="chId"></el-table-column>
                 <el-table-column label="Item" prop="chName"></el-table-column>
                 <el-table-column
-                    label="Fee (CNY)"
+                    label="Fee (NZD)"
                     prop="chPrice"
                 ></el-table-column>
                 <el-table-column label="Actions" width="290" fixed="right">

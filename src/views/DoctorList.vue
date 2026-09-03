@@ -57,7 +57,7 @@
             </el-table-column>
             <el-table-column prop="dSection" label="Department" width="180">
             </el-table-column>
-            <el-table-column prop="dCard" label="ID Number">
+            <el-table-column prop="dCard" label="MCNZ No.">
             </el-table-column>
             <el-table-column prop="dPhone" label="Phone">
             </el-table-column>
@@ -65,7 +65,7 @@
             </el-table-column>
             <el-table-column prop="dAvgStar" label="Rating / 5" width="100">
             </el-table-column>
-            <el-table-column prop="dPrice" label="Fee (CNY)" width="100">
+            <el-table-column prop="dPrice" label="Fee (NZD)" width="100">
             </el-table-column>
             <el-table-column prop="dState" label="Status" width="100">
                 <template slot-scope="scope">
@@ -155,7 +155,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="ID Number" label-width="120px" prop="dCard">
+                <el-form-item label="MCNZ No." label-width="120px" prop="dCard">
                     <el-input
                         v-model="addForm.dCard"
                         autocomplete="off"
@@ -255,7 +255,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="ID Number" label-width="120px" prop="dCard">
+                <el-form-item label="MCNZ No." label-width="120px" prop="dCard">
                     <el-input
                         v-model="modifyForm.dCard"
                         autocomplete="off"
@@ -315,29 +315,6 @@ import request from "@/utils/request.js";
 export default {
     name: "DoctorList",
     data() {
-        var validateMoblie = (rule, value, callback) => {
-            if (value === undefined) {
-                callback(new Error("Please enter phone number"));
-            } else {
-                let reg =
-                    /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
-                if (!reg.test(value)) {
-                    callback(new Error("Please enter a valid phone number"));
-                }
-                callback();
-            }
-        };
-        var validateCard = (rule, value, callback) => {
-            if (value === undefined) {
-                callback(new Error("Please enter ID number"));
-            } else {
-                let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-                if (!reg.test(value)) {
-                    callback(new Error("Please enter a valid ID number"));
-                }
-                callback();
-            }
-        };
         return {
             // File upload
             fileList: [],
@@ -351,7 +328,7 @@ export default {
                 dPassword: 123456,
                 dGender: "Male",
             },
-            posts: ["Chief Physician", "Associate Chief Physician", "Attending Physician"],
+            posts: ["Consultant", "Specialist", "Registrar"],
             sections: [
                 "Neurology",
                 "Endocrinology",
@@ -386,12 +363,6 @@ export default {
                 ],
                 dName: [
                     { required: true, message: "Please enter name", trigger: "blur" },
-                    {
-                        min: 2,
-                        max: 5,
-                        message: "Name must be 2 to 5 characters",
-                        trigger: "blur",
-                    },
                 ],
                 dPost: [
                     { required: true, message: "Please select title", trigger: "blur" },
@@ -418,8 +389,6 @@ export default {
                         trigger: "blur",
                     },
                 ],
-                dPhone: [{ validator: validateMoblie }],
-                dCard: [{ validator: validateCard }],
                 dIntroduction: [
                     {
                         required: true,
@@ -475,7 +444,7 @@ export default {
                         })
                         .then((res) => {
                             if (res.data.status !== 200)
-                                return this.$message.error("Failed to update!");
+                                return this.$message.error(res.data.msg || "Failed to update!");
                             this.modifyFormVisible = false;
                             this.requestDoctors();
                             this.$message.success("Doctor updated successfully!");
@@ -573,7 +542,7 @@ export default {
                         .then((res) => {
                             if (res.data.status !== 200)
                                 return this.$message.error(
-                                    "Invalid or occupied account!"
+                                    res.data.msg || "Invalid or occupied account!"
                                 );
                             this.addFormVisible = false;
                             this.requestDoctors();

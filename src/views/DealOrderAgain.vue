@@ -92,7 +92,7 @@
                </template>
              </el-table-column>
         </el-table>
-        <el-tag>Total: {{drugTotalPrice}} CNY</el-tag>
+        <el-tag>Total: {{drugTotalPrice}} NZD</el-tag>
 
       </el-col>
       
@@ -145,7 +145,7 @@
                 </template>
               </el-table-column>
               </el-table>
-              <el-tag>Total: {{checkTotalPrice}} CNY</el-tag>
+              <el-tag>Total: {{checkTotalPrice}} NZD</el-tag>
       </el-col>
     </el-row>
 
@@ -274,13 +274,13 @@ export default {
       let oId = this.oId;
       let oAdvice = this.advice;
       for(let i=0;i<this.drugBuyData.length;i++){
-        oDrug += this.drugBuyData[i].drName+"*"+this.drugBuyData[i].drPrice+"(CNY)*"+this.drugBuyData[i].drNum+" ";
+        oDrug += this.drugBuyData[i].drName+"*"+this.drugBuyData[i].drPrice+"(NZD)*"+this.drugBuyData[i].drNum+" ";
       };
        for(let i=0;i<this.checkBuyData.length;i++){
-        oCheck += this.checkBuyData[i].chName+"*"+this.checkBuyData[i].chPrice+"(CNY) ";
+        oCheck += this.checkBuyData[i].chName+"*"+this.checkBuyData[i].chPrice+"(NZD) ";
       }
-      oCheck += "Exam total"+this.checkTotalPrice+"CNY";
-      oDrug += "Drug total"+this.drugTotalPrice+"CNY";
+      oCheck += "Exam total"+this.checkTotalPrice+"NZD";
+      oDrug += "Drug total"+this.drugTotalPrice+"NZD";
       oTotalPrice = this.checkTotalPrice+this.drugTotalPrice;
       return {oId,oAdvice, oDrug, oCheck, oTotalPrice};
 

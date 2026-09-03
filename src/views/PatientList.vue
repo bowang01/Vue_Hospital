@@ -23,7 +23,7 @@
             </el-table-column>
             <el-table-column prop="pAge" label="Age" width="80">
             </el-table-column>
-            <el-table-column prop="pCard" label="ID Number"> </el-table-column>
+            <el-table-column prop="pCard" label="NHI"> </el-table-column>
             <el-table-column prop="pPhone" label="Phone"> </el-table-column>
             <el-table-column prop="pEmail" label="Email" width="170">
             </el-table-column>

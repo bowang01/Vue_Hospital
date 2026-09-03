@@ -43,7 +43,7 @@
                 <el-table-column prop="dSection" label="Department" width="180"></el-table-column>
                 <el-table-column prop="dIntroduction" label="Bio">
                 </el-table-column>
-                <el-table-column prop="dPrice" label="Fee (CNY)" width="100">
+                <el-table-column prop="dPrice" label="Fee (NZD)" width="100">
                 </el-table-column>
                 <el-table-column prop="dAvgStar" label="Rating / 5" width="100">
                 </el-table-column>
@@ -77,7 +77,7 @@
                 <el-form-item label="Patient Name" label-width="150px">
                     <el-input v-model="orderForm.pName" autocomplete="off" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="Patient ID Card" label-width="150px">
+                <el-form-item label="Patient NHI" label-width="150px">
                     <el-input v-model="orderForm.pCard" autocomplete="off" disabled></el-input>
                 </el-form-item>
             </el-form>
