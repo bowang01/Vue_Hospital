@@ -7,6 +7,11 @@ module.exports = {
     lintOnSave: false,
     productionSourceMap: false,
     parallel: false,
+    configureWebpack: {
+        performance: {
+            hints: false
+        }
+    },
     devServer: {
         //host: "139.224.72.73",
         host: "localhost",
