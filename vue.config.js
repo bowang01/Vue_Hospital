@@ -4,7 +4,9 @@
  * @Date: 2024-01-14 20:02:29
  */
 module.exports = {
-    lintOnSave: false, // Disable ESLint
+    lintOnSave: false,
+    productionSourceMap: false,
+    parallel: false,
     devServer: {
         //host: "139.224.72.73",
         host: "localhost",

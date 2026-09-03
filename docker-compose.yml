@@ -1,18 +1,16 @@
+name: hospital-front
+
 services:
   frontend:
     build:
       context: .
     container_name: hospital-front
     restart: unless-stopped
-
     expose:
       - "8082"
-
     environment:
       VUE_APP_BASE_API: /hospital
-
     networks:
-      - default
       - proxy
 
 networks:
